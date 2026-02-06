@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Projects, { ProjectGridCard } from './Projects';
+import SearchResults from './SearchResults';
 import { useSimpleDarkMode } from './darkMode';
 import { projectsData } from './data';
+import projectRegistry from './projects/registry';
 
 const Home = () => (
   <div className="flex flex-col min-h-[75vh] justify-between">
@@ -21,25 +23,53 @@ const Home = () => (
 );
 
 const About = () => <div className="p-4 text-zinc-800 dark:text-zinc-200">About Page Content</div>;
-const ProjectDetail = () => <div className="p-4 text-zinc-800 dark:text-zinc-200">Project Details Placeholder</div>;
+
+const ProjectDetail = () => {
+  const { id } = useParams();
+  const project = projectsData.find(p => p.title === id);
+  
+  if (!project) return <div className="text-center py-20 text-zinc-500">Project not found</div>;
+
+  // Check if a specific component exists for this project in the registry
+  const SpecificComponent = projectRegistry[project.title];
+
+  if (SpecificComponent) {
+      return <SpecificComponent meta={project} />;
+  }
+
+  // Fallback generic view
+  return (
+    <div className="max-w-2xl mx-auto py-10">
+        <h1 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 mb-4">{project.title}</h1>
+        <div className="flex gap-2 mb-6">
+            {project.tags.map(t => <span key={t} className="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 rounded text-xs font-mono">{t}</span>)}
+        </div>
+        <div className="prose dark:prose-invert">
+            <p>{project.description}</p>
+            <p className="text-zinc-500 italic mt-8">Specific details for this project have not been populated yet.</p>
+        </div>
+    </div>
+  );
+};
 
 export default function App() {
   const { theme, toggleTheme } = useSimpleDarkMode();
   const location = useLocation();
 
   useEffect(() => {
-    document.title = location.pathname === '/' ? 'Tomayhawk' : `Tomayhawk - ${location.pathname.slice(1).charAt(0).toUpperCase() + location.pathname.slice(2)}`;
+    document.title = location.pathname === '/' ? 'Tomayhawk' : `Tomayhawk - ${location.pathname.slice(1).split('/')[0].charAt(0).toUpperCase() + location.pathname.slice(2).split('/')[0]}`;
   }, [location]);
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-100 dark:bg-[#111114] text-zinc-900 dark:text-zinc-100 transition-colors duration-200 font-sans">
       <Navbar toggleTheme={toggleTheme} currentTheme={theme} />
-      <div className="mx-[18%] py-8 flex-1">
+      <div className="mx-[10%] lg:mx-[18%] py-8 flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/search" element={<SearchResults />} />
         </Routes>
       </div>
       <footer className="w-full py-6 text-center text-xs text-zinc-400 dark:text-zinc-600 bg-transparent">© 2026 Tomayhawk. All rights reserved.</footer>

@@ -1,17 +1,26 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar({ toggleTheme, currentTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+        navigate(`/search?q=${encodeURIComponent(e.target.value)}`);
+        setMobileSearchOpen(false);
+        e.target.blur();
+    }
+  };
 
   return (
     <nav className="w-full bg-zinc-50 dark:bg-[#09090b] border-b border-zinc-200 dark:border-zinc-800 transition-colors duration-200 sticky top-0 z-50">
-      <div className="mx-[10%] lg:mx-[18%] h-16 flex items-center justify-between relative bg-zinc-50 dark:bg-[#09090b] z-20">
+      <div className="mx-[10%] lg:mx-[18%] h-16 flex items-center justify-between relative bg-zinc-50 dark:bg-[#09090b] z-20 gap-4">
         
         {/* Logo & Links */}
-        <div className="flex items-center gap-4 shrink-0 relative z-30">
+        <div className="flex items-center gap-4 shrink-0">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 -ml-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 sm:hidden text-zinc-600 dark:text-zinc-400">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
@@ -25,26 +34,22 @@ export default function Navbar({ toggleTheme, currentTheme }) {
           </div>
         </div>
 
-        {/* Desktop Search Bar - Hidden until very wide screens (1600px+) */}
-        <div className="hidden min-[1600px]:flex absolute left-0 right-0 justify-center pointer-events-none">
-            <div className="pointer-events-auto flex w-full max-w-[1200px] justify-center">
-                <div className={`flex w-full items-center transition-all duration-700 ease-out min-[1800px]:max-w-[600px] max-w-[400px] ${isSearchFocused ? 'scale-105' : ''}`}>
-                    <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-l-full px-4 py-1.5 shadow-sm focus-within:border-blue-500 ml-auto overflow-hidden">
-                        <div className={`text-zinc-400 overflow-hidden transition-all duration-700 ease-out ${isSearchFocused ? 'w-5 mr-3 opacity-100' : 'w-0 mr-0 opacity-0'}`}>
-                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 min-w-[16px]"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                        </div>
-                        <input type="text" placeholder="Search..." onFocus={() => setIsSearchFocused(true)} onBlur={() => setIsSearchFocused(false)} className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
-                    </div>
-                    <button className="px-5 py-1.5 bg-zinc-100 dark:bg-zinc-800 border border-l-0 border-zinc-300 dark:border-zinc-700 rounded-r-full hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-400 transition cursor-pointer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                    </button>
+        {/* Responsive Search Bar */}
+        <div className="hidden md:flex flex-1 justify-center max-w-2xl px-4">
+            <div className={`flex w-full items-center transition-all duration-300 ${isSearchFocused ? 'scale-[1.02]' : ''}`}>
+                <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-l-full px-4 py-1.5 shadow-sm focus-within:border-blue-500 overflow-hidden">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 text-zinc-400 mr-2 shrink-0"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+                    <input type="text" placeholder="Search..." onKeyDown={handleSearch} onFocus={() => setIsSearchFocused(true)} onBlur={() => setIsSearchFocused(false)} className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
                 </div>
+                <button className="px-5 py-1.5 bg-zinc-100 dark:bg-zinc-800 border border-l-0 border-zinc-300 dark:border-zinc-700 rounded-r-full hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-400 transition">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </button>
             </div>
         </div>
 
         {/* Right Tools */}
-        <div className="flex items-center gap-2 relative z-30">
-           <button onClick={() => setIsSearchExpanded(!isSearchExpanded)} className="min-[1600px]:hidden p-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
+        <div className="flex items-center gap-2 shrink-0">
+           <button onClick={() => setMobileSearchOpen(!mobileSearchOpen)} className="md:hidden p-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
            </button>
           <a href="https://github.com/Tomayhawk" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
@@ -54,22 +59,19 @@ export default function Navbar({ toggleTheme, currentTheme }) {
             {currentTheme === 'light' ? (
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejn="round" className="w-6 h-6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             ) : (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejn="round" className="w-6 h-6"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejn="round" className="w-6 h-6"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
             )}
           </button>
         </div>
       </div>
 
-      {/* Mobile/Expanded Search */}
-      {isSearchExpanded && (
-        <div className="min-[1600px]:hidden border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#09090b] px-4 py-3">
+      {/* Mobile Expanded Search */}
+      {mobileSearchOpen && (
+        <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#09090b] px-4 py-3">
              <div className="flex w-full items-center">
-                <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-l-full px-4 py-1.5 shadow-sm focus-within:border-blue-500">
-                    <input type="text" autoFocus placeholder="Search..." className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
+                <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-1.5 shadow-sm">
+                    <input type="text" autoFocus onKeyDown={handleSearch} placeholder="Search..." className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
                 </div>
-                <button className="px-5 py-1.5 bg-zinc-100 dark:bg-zinc-800 border border-l-0 border-zinc-300 dark:border-zinc-700 rounded-r-full hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-400 transition cursor-pointer">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                </button>
             </div>
         </div>
       )}
