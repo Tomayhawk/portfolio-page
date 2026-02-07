@@ -5,12 +5,19 @@ export default function Navbar({ toggleTheme, currentTheme }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [searchVal, setSearchVal] = useState('');
   const navigate = useNavigate();
 
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-        navigate(`/search?q=${encodeURIComponent(e.target.value)}`);
+  const doSearch = () => {
+    if (searchVal.trim()) {
+        navigate(`/search?q=${encodeURIComponent(searchVal)}`);
         setMobileSearchOpen(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+        doSearch();
         e.target.blur();
     }
   };
@@ -34,25 +41,35 @@ export default function Navbar({ toggleTheme, currentTheme }) {
           </div>
         </div>
 
-        {/* Responsive Search Bar */}
-        <div className="hidden md:flex flex-1 justify-center max-w-2xl px-4">
-            <div className={`flex w-full items-center transition-all duration-300 ${isSearchFocused ? 'scale-[1.02]' : ''}`}>
-                <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-l-full px-4 py-1.5 shadow-sm focus-within:border-blue-500 overflow-hidden">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 text-zinc-400 mr-2 shrink-0"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                    <input type="text" placeholder="Search..." onKeyDown={handleSearch} onFocus={() => setIsSearchFocused(true)} onBlur={() => setIsSearchFocused(false)} className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
+        {/* Search Bar */}
+        <div className="hidden md:flex flex-1 justify-end max-w-xl px-4">
+            <div className={`flex items-center transition-all duration-300 ease-out ${isSearchFocused || searchVal ? 'w-full' : 'w-48'}`}>
+                <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-l-full px-4 py-1.5 shadow-sm focus-within:border-blue-500 overflow-hidden group">
+                    <input 
+                        type="text" 
+                        value={searchVal}
+                        onChange={(e) => setSearchVal(e.target.value)}
+                        placeholder="Search..." 
+                        onKeyDown={handleKeyDown} 
+                        onFocus={() => setIsSearchFocused(true)} 
+                        onBlur={() => setIsSearchFocused(false)} 
+                        className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" 
+                    />
                 </div>
-                <button className="px-5 py-1.5 bg-zinc-100 dark:bg-zinc-800 border border-l-0 border-zinc-300 dark:border-zinc-700 rounded-r-full hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-400 transition">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                <button onClick={doSearch} className="px-4 py-1.5 bg-zinc-100 dark:bg-zinc-800 border border-l-0 border-zinc-300 dark:border-zinc-700 rounded-r-full hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-400 transition">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
                 </button>
             </div>
         </div>
 
         {/* Right Tools */}
         <div className="flex items-center gap-2 shrink-0">
+           {/* Mobile Search Icon Toggle */}
            <button onClick={() => setMobileSearchOpen(!mobileSearchOpen)} className="md:hidden p-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
            </button>
-          <a href="https://github.com/Tomayhawk" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
+           {/* Github & Theme Toggle */}
+           <a href="https://github.com/Tomayhawk" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.05-.015-2.055-3.33.72-4.035-1.605-4.035-1.605-.54-1.38-1.335-1.755-1.335-1.755-1.085-.735.09-.72.09-.72 1.2.09 1.83 1.245 1.83 1.245 1.065 1.815 2.805 1.29 3.495.99.105-.78.42-1.29.765-1.59-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405 1.02 0 2.04.135 3 .405 2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
           </a>
           <button onClick={toggleTheme} className="p-2 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white transition">
@@ -70,7 +87,15 @@ export default function Navbar({ toggleTheme, currentTheme }) {
         <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#09090b] px-4 py-3">
              <div className="flex w-full items-center">
                 <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-1.5 shadow-sm">
-                    <input type="text" autoFocus onKeyDown={handleSearch} placeholder="Search..." className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
+                    <input 
+                        type="text" 
+                        autoFocus 
+                        value={searchVal}
+                        onChange={(e) => setSearchVal(e.target.value)}
+                        onKeyDown={handleKeyDown} 
+                        placeholder="Search..." 
+                        className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" 
+                    />
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 import Projects, { ProjectGridCard } from './Projects';
 import SearchResults from './SearchResults';
 import { useSimpleDarkMode } from './darkMode';
-import { projectsData } from './data';
+import { projectsData, getTagColor, formatSize } from './data';
 import projectRegistry from './projects/registry';
 
 const Home = () => (
@@ -16,7 +16,7 @@ const Home = () => (
     <div className="mt-auto pt-12">
       <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-500 mb-4 px-1">Pinned Projects</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        {projectsData.filter(p => [1, 2, 3, 4, 5].includes(p.id)).map(p => <ProjectGridCard key={p.id} project={p} />)}
+        {projectsData.slice(0, 5).map(p => <ProjectGridCard key={p.id} project={p} />)}
       </div>
     </div>
   </div>
@@ -24,29 +24,44 @@ const Home = () => (
 
 const About = () => <div className="p-4 text-zinc-800 dark:text-zinc-200">About Page Content</div>;
 
+// PROJECT TEMPLATE
 const ProjectDetail = () => {
   const { id } = useParams();
+  // Find project by matching Title
   const project = projectsData.find(p => p.title === id);
   
   if (!project) return <div className="text-center py-20 text-zinc-500">Project not found</div>;
 
-  // Check if a specific component exists for this project in the registry
   const SpecificComponent = projectRegistry[project.title];
 
-  if (SpecificComponent) {
-      return <SpecificComponent meta={project} />;
-  }
-
-  // Fallback generic view
   return (
-    <div className="max-w-2xl mx-auto py-10">
-        <h1 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 mb-4">{project.title}</h1>
-        <div className="flex gap-2 mb-6">
-            {project.tags.map(t => <span key={t} className="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 rounded text-xs font-mono">{t}</span>)}
+    <div className="max-w-full mx-auto py-8 animate-fadeIn">
+        {/* Template Header */}
+        <div className="mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-6">
+            <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">{project.title}</h1>
+            <div className="flex flex-wrap items-center gap-4 text-sm">
+                 <div className="flex gap-2">
+                    {project.tags.map(t => <span key={t} className={`px-2 py-1 rounded text-xs font-bold ${getTagColor(t)}`}>{t}</span>)}
+                 </div>
+                 <span className="text-zinc-400">|</span>
+                 <span className="text-zinc-500 dark:text-zinc-400">Updated: {new Date(project.modified).toLocaleDateString()}</span>
+                 <span className="text-zinc-400">|</span>
+                 <span className="text-zinc-500 dark:text-zinc-400 font-mono">{formatSize(project.sizeBytes)}</span>
+            </div>
         </div>
-        <div className="prose dark:prose-invert">
-            <p>{project.description}</p>
-            <p className="text-zinc-500 italic mt-8">Specific details for this project have not been populated yet.</p>
+
+        {/* Content Body */}
+        <div className="prose dark:prose-invert max-w-none text-zinc-800 dark:text-zinc-300">
+             {SpecificComponent ? (
+                 <SpecificComponent meta={project} />
+             ) : (
+                 <>
+                    <p className="lead">{project.description}</p>
+                    <div className="mt-12 p-8 bg-zinc-100 dark:bg-zinc-900 rounded-lg text-center text-zinc-500">
+                        No specific content populated for this project yet.
+                    </div>
+                 </>
+             )}
         </div>
     </div>
   );
