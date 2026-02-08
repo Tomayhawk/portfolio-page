@@ -1,3 +1,4 @@
 node_modules
+/public/photos
 eslint.config.js
 *.json
