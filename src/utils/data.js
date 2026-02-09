@@ -1,4 +1,3 @@
-// Project Tags and Data
 export const TAGS = {
   PYTHON: { label: 'Python', color: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200' },
   DISCORD: { label: 'Discord Bot', color: 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-200' },
@@ -33,6 +32,7 @@ export const projectsData = [
     sizeBytes: 1500000,
     version: '1.0.4',
     license: 'MIT',
+    status: 'Active',
     links: { github: 'https://github.com/tomayhawk/project1' }
   },
   {
@@ -45,6 +45,7 @@ export const projectsData = [
     sizeBytes: 450000,
     version: '2.1.0',
     license: 'MIT',
+    status: 'Active',
     links: { github: '#', demo: '#' }
   },
   {
@@ -57,6 +58,7 @@ export const projectsData = [
     sizeBytes: 24000,
     version: '0.9.beta',
     license: 'GPLv3',
+    status: 'Maintenance',
     links: { github: '#' }
   },
   {
@@ -68,6 +70,7 @@ export const projectsData = [
     created: '2025-10-01',
     sizeBytes: 10240,
     version: '1.0.0',
+    status: 'Archived',
     links: {}
   },
   {
@@ -79,6 +82,7 @@ export const projectsData = [
     created: '2025-09-20',
     sizeBytes: 512000,
     version: '3.0.1',
+    status: 'Active',
     links: { github: '#', demo: '#' }
   },
   {
@@ -90,6 +94,7 @@ export const projectsData = [
     created: '2025-12-15',
     sizeBytes: 25000000,
     version: '1.2',
+    status: 'Active',
     links: { appStore: '#' }
   },
   {
@@ -101,6 +106,7 @@ export const projectsData = [
     created: '2025-06-01',
     sizeBytes: 128000000,
     version: '0.1-alpha',
+    status: 'In Development',
     links: { github: '#' }
   },
   {
@@ -112,6 +118,7 @@ export const projectsData = [
     created: '2025-09-01',
     sizeBytes: 5000000,
     version: '1.0',
+    status: 'Archived',
     links: {}
   },
   {
@@ -123,6 +130,7 @@ export const projectsData = [
     created: '2025-07-20',
     sizeBytes: 15000000,
     version: '2.0',
+    status: 'Active',
     links: { playStore: '#' }
   },
   {
@@ -134,6 +142,7 @@ export const projectsData = [
     created: '2025-05-10',
     sizeBytes: 450000000,
     version: '0.5',
+    status: 'Paused',
     links: { demo: '#' }
   },
   {
@@ -145,6 +154,7 @@ export const projectsData = [
     created: '2025-12-20',
     sizeBytes: 204800,
     version: '0.1',
+    status: 'Active',
     links: { github: '#' }
   },
   {
@@ -156,15 +166,85 @@ export const projectsData = [
     created: '2025-08-01',
     sizeBytes: 850000000,
     version: '1.0',
+    status: 'Completed',
     links: { github: '#', paper: '#' }
   }
 ];
 
 // Blog Posts
 export const BLOG_POSTS = [
-    { id: 1, title: 'Building a Portfolio with React', date: '2026-02-05', excerpt: 'How I structured this website using Vite and Tailwind CSS.' },
-    { id: 2, title: 'Why I Switch to Linux', date: '2026-01-20', excerpt: 'A journey from Windows to a custom Arch Linux setup.' },
-    { id: 3, title: 'Understanding AsyncIO in Python', date: '2026-01-10', excerpt: 'Deep dive into asynchronous programming for bot development.' },
+    { 
+      id: 1, 
+      title: 'Building a Portfolio with React', 
+      date: '2026-02-05', 
+      excerpt: 'How I structured this website using Vite and Tailwind CSS.',
+      category: 'Code',
+      tags: ['React', 'Tailwind', 'Vite'],
+      created: '2026-02-05',
+      modified: '2026-02-05',
+      sizeBytes: 12000,
+      links: {} 
+    },
+    { 
+      id: 2, 
+      title: 'Why I Switch to Linux', 
+      date: '2026-01-20', 
+      excerpt: 'A journey from Windows to a custom Arch Linux setup.',
+      category: 'Opinion',
+      tags: ['Linux', 'Arch', 'Workflow'],
+      created: '2026-01-20',
+      modified: '2026-01-22',
+      sizeBytes: 15000,
+      links: {}
+    },
+    { 
+      id: 3, 
+      title: 'Understanding AsyncIO in Python', 
+      date: '2026-01-10', 
+      excerpt: 'Deep dive into asynchronous programming for bot development.',
+      category: 'Code',
+      tags: ['Python', 'AsyncIO'],
+      created: '2026-01-10',
+      modified: '2026-01-10',
+      sizeBytes: 18000,
+      links: {}
+    },
+    { 
+      id: 4, 
+      title: 'Coffee Brewing Methods Ranked', 
+      date: '2025-12-15', 
+      excerpt: 'My subjective ranking of brewing methods from V60 to French Press.',
+      category: 'Lifestyle',
+      tags: ['Coffee', 'Hobby'],
+      created: '2025-12-15',
+      modified: '2025-12-15',
+      sizeBytes: 8000,
+      links: {}
+    },
+    { 
+      id: 5, 
+      title: 'Digital Minimalism in 2026', 
+      date: '2025-11-30', 
+      excerpt: 'Reducing screen time and focusing on deep work.',
+      category: 'Opinion',
+      tags: ['Productivity', 'Minimalism'],
+      created: '2025-11-30',
+      modified: '2025-11-30',
+      sizeBytes: 10000,
+      links: {}
+    },
+    { 
+      id: 6, 
+      title: 'Chess Openings for Beginners', 
+      date: '2025-10-20', 
+      excerpt: 'Why you should stop memorizing lines and start understanding principles.',
+      category: 'Lifestyle',
+      tags: ['Chess', 'Strategy'],
+      created: '2025-10-20',
+      modified: '2025-10-20',
+      sizeBytes: 14000,
+      links: {}
+    },
 ];
 
 // Photos

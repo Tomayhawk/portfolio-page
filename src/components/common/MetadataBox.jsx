@@ -1,8 +1,7 @@
 import { formatSize } from '../../utils/data';
-import { styles } from '../../utils/styles';
 
 const MetaRow = ({ label, value, isMono = false }) => (
-    <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 flex-wrap gap-x-2">
+    <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0fv flex-wrap gap-x-2">
         <span className="text-zinc-500 dark:text-zinc-400 text-[10px] uppercase font-bold tracking-wide">{label}</span>
         <span className={`text-zinc-800 dark:text-zinc-200 text-sm ${isMono ? 'font-mono' : ''}`}>{value}</span>
     </div>
@@ -12,15 +11,18 @@ export const MetadataBox = ({ project }) => (
     <div className="bg-white dark:bg-[#18181b] p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm text-sm">
         <h3 className="font-bold text-[10px] text-zinc-500 uppercase mb-2 tracking-wider">Metadata</h3>
         <div className="space-y-1">
-            <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 flex-wrap gap-x-2">
-                <span className="text-zinc-500 dark:text-zinc-400 text-[10px] uppercase font-bold tracking-wide">Status</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-900/20 px-1.5 py-0.5 rounded text-[10px]">Active</span>
-            </div>
+            {project.status && (
+                <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 flex-wrap gap-x-2">
+                    <span className="text-zinc-500 dark:text-zinc-400 text-[10px] uppercase font-bold tracking-wide">Status</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-900/20 px-1.5 py-0.5 rounded text-[10px]">{project.status}</span>
+                </div>
+            )}
             <MetaRow label="Created" value={new Date(project.created).toLocaleDateString()} />
             {project.version && <MetaRow label="Version" value={project.version} isMono />}
             {project.license && <MetaRow label="License" value={project.license} />}
-            <MetaRow label="Size" value={formatSize(project.sizeBytes)} isMono />
+            {project.sizeBytes && <MetaRow label="Size" value={formatSize(project.sizeBytes)} isMono />}
             <MetaRow label="Modified" value={new Date(project.modified).toLocaleDateString()} />
+            {project.category && <MetaRow label="Category" value={project.category} />}
         </div>
 
         {project.links && Object.keys(project.links).length > 0 && (
