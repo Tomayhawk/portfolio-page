@@ -177,9 +177,8 @@ export const BLOG_POSTS = [
       id: 1, 
       title: 'Building a Portfolio with React', 
       date: '2026-02-05', 
-      excerpt: 'How I structured this website using Vite and Tailwind CSS.',
-      category: 'Code',
-      tags: ['React', 'Tailwind', 'Vite'],
+      excerpt: 'How I structured this website using Vite and Tailwind CSS. (Temporary Placeholder)',
+      categories: ['Projects'],
       created: '2026-02-05',
       modified: '2026-02-05',
       sizeBytes: 12000,
@@ -189,9 +188,8 @@ export const BLOG_POSTS = [
       id: 2, 
       title: 'Why I Switch to Linux', 
       date: '2026-01-20', 
-      excerpt: 'A journey from Windows to a custom Arch Linux setup.',
-      category: 'Opinion',
-      tags: ['Linux', 'Arch', 'Workflow'],
+      excerpt: 'A journey from Windows to a custom Arch Linux setup. (Temporary Placeholder)',
+      categories: ['Activity', 'Projects'],
       created: '2026-01-20',
       modified: '2026-01-22',
       sizeBytes: 15000,
@@ -201,9 +199,8 @@ export const BLOG_POSTS = [
       id: 3, 
       title: 'Understanding AsyncIO in Python', 
       date: '2026-01-10', 
-      excerpt: 'Deep dive into asynchronous programming for bot development.',
-      category: 'Code',
-      tags: ['Python', 'AsyncIO'],
+      excerpt: 'Deep dive into asynchronous programming for bot development. (Temporary Placeholder)',
+      categories: ['Projects'],
       created: '2026-01-10',
       modified: '2026-01-10',
       sizeBytes: 18000,
@@ -213,9 +210,8 @@ export const BLOG_POSTS = [
       id: 4, 
       title: 'Coffee Brewing Methods Ranked', 
       date: '2025-12-15', 
-      excerpt: 'My subjective ranking of brewing methods from V60 to French Press.',
-      category: 'Lifestyle',
-      tags: ['Coffee', 'Hobby'],
+      excerpt: 'My subjective ranking of brewing methods from V60 to French Press. (Temporary Placeholder)',
+      categories: ['Activity'],
       created: '2025-12-15',
       modified: '2025-12-15',
       sizeBytes: 8000,
@@ -223,41 +219,152 @@ export const BLOG_POSTS = [
     },
     { 
       id: 5, 
-      title: 'Digital Minimalism in 2026', 
-      date: '2025-11-30', 
-      excerpt: 'Reducing screen time and focusing on deep work.',
-      category: 'Opinion',
-      tags: ['Productivity', 'Minimalism'],
-      created: '2025-11-30',
-      modified: '2025-11-30',
-      sizeBytes: 10000,
+      title: 'My Favorite Chess Openings', 
+      date: '2025-10-20', 
+      excerpt: 'Why I prefer the London System and the Caro-Kann. (Temporary Placeholder)',
+      categories: ['Chess', 'Activity'],
+      created: '2025-10-20',
+      modified: '2025-10-20',
+      sizeBytes: 14000,
       links: {}
     },
     { 
       id: 6, 
-      title: 'Chess Openings for Beginners', 
-      date: '2025-10-20', 
-      excerpt: 'Why you should stop memorizing lines and start understanding principles.',
-      category: 'Lifestyle',
-      tags: ['Chess', 'Strategy'],
-      created: '2025-10-20',
-      modified: '2025-10-20',
-      sizeBytes: 14000,
+      title: 'Street Photography Collection', 
+      date: '2025-09-01', 
+      excerpt: 'A selection of photos from my recent trip to Tokyo. (Temporary Placeholder)',
+      categories: ['Photography', 'Activity'],
+      created: '2025-09-01',
+      modified: '2025-09-01',
+      sizeBytes: 50000,
       links: {}
     },
 ];
 
 // Photos
 export const PHOTOS = [
-  { id: 1, src: '/photos/2W5A7297.JPG', label: 'Photo 1' },
-  { id: 2, src: '/photos/2W5A7306.JPG', label: 'Photo 2' },
-  { id: 3, src: '/photos/2W5A7608.JPG', label: 'Photo 3' },
-  { id: 4, src: '/photos/2W5A7738.JPG', label: 'Photo 4' },
-  { id: 5, src: '/photos/2W5A7833(1).JPG', label: 'Photo 5' },
-  { id: 6, src: '/photos/2W5A7877.JPG', label: 'Photo 6' },
-  { id: 7, src: '/photos/2W5A7898.JPG', label: 'Photo 7' },
-  { id: 8, src: '/photos/2W5A8028.JPG', label: 'Photo 8' },
-  { id: 9, src: '/photos/2W5A2662.JPG', label: 'Photo 9' },
+  { 
+      id: 1, 
+      src: '/photos/2W5A7297.JPG', 
+      title: 'Infinite Lights', 
+      description: 'Immersive LED light installation art.',
+      location: 'Tokyo, Japan',
+      camera: 'Sony A7IV',
+      lens: '24mm f/1.4 GM',
+      dimensions: '6000 x 4000',
+      iso: '800',
+      shutterSpeed: '1/60s',
+      aperture: 'f/1.4'
+  },
+  { 
+      id: 2, 
+      src: '/photos/2W5A7306.JPG', 
+      title: 'Orchids', 
+      description: 'Vibrant orchids in full bloom.',
+      location: 'Singapore Botanic Gardens',
+      camera: 'Sony A7IV',
+      lens: '90mm Macro G',
+      dimensions: '6000 x 4000',
+      iso: '200',
+      shutterSpeed: '1/200s',
+      aperture: 'f/2.8'
+  },
+  { 
+      id: 3, 
+      src: '/photos/2W5A7608.JPG', 
+      title: 'Forest Path', 
+      description: 'Stone steps leading through a mossy forest.',
+      location: 'Kyoto, Japan',
+      camera: 'Sony A7IV',
+      lens: '24-70mm GM II',
+      dimensions: '4000 x 6000',
+      focalLength: '35mm',
+      iso: '100',
+      shutterSpeed: '1/100s',
+      aperture: 'f/8'
+  },
+  { 
+      id: 4, 
+      src: '/photos/2W5A7738.JPG', 
+      title: 'Golden Pavilion', 
+      description: 'Kinkaku-ji temple reflecting in the pond.',
+      location: 'Kyoto, Japan',
+      camera: 'Sony A7IV',
+      lens: '24-70mm GM II',
+      dimensions: '6000 x 4000',
+      focalLength: '50mm',
+      iso: '100',
+      shutterSpeed: '1/500s',
+      aperture: 'f/5.6'
+  },
+  { 
+      id: 5, 
+      src: '/photos/2W5A7833(1).JPG', 
+      title: 'Kiyomizu-dera View', 
+      description: 'The famous wooden stage overlooking the trees.',
+      location: 'Kyoto, Japan',
+      camera: 'Sony A7IV',
+      lens: '16-35mm GM',
+      dimensions: '6000 x 4000',
+      focalLength: '24mm',
+      iso: '100',
+      shutterSpeed: '1/250s',
+      aperture: 'f/8'
+  },
+  { 
+      id: 6, 
+      src: '/photos/2W5A7877.JPG', 
+      title: 'Vermilion Pagoda', 
+      description: 'A vivid red pagoda standing tall against the sky.',
+      location: 'Osaka, Japan',
+      camera: 'Sony A7IV',
+      lens: '24-70mm GM II',
+      dimensions: '4000 x 6000',
+      focalLength: '70mm',
+      iso: '100',
+      shutterSpeed: '1/400s',
+      aperture: 'f/4'
+  },
+  { 
+      id: 7, 
+      src: '/photos/2W5A7898.JPG', 
+      title: 'Temple Gate', 
+      description: 'Grand entrance gate to the shrine complex.',
+      location: 'Fushimi Inari, Kyoto',
+      camera: 'Sony A7IV',
+      lens: '24mm f/1.4 GM',
+      dimensions: '6000 x 4000',
+      iso: '100',
+      shutterSpeed: '1/320s',
+      aperture: 'f/2.8'
+  },
+  { 
+      id: 8, 
+      src: '/photos/2W5A8028.JPG', 
+      title: 'Solar Eclipse', 
+      description: 'The diamond ring effect captured during totality.',
+      location: 'Texas, USA',
+      camera: 'Sony A7IV',
+      lens: '200-600mm G',
+      dimensions: '3500 x 2333',
+      focalLength: '600mm',
+      iso: '400',
+      shutterSpeed: '1/1000s',
+      aperture: 'f/11'
+  },
+  { 
+      id: 9, 
+      src: '/photos/2W5A2662.JPG', 
+      title: 'Bonfire', 
+      description: 'Close-up of a warm, crackling fire at night.',
+      location: 'Camping Site',
+      camera: 'Fujifilm X-T5',
+      lens: '35mm f/2',
+      dimensions: '6000 x 4000',
+      iso: '3200',
+      shutterSpeed: '1/100s',
+      aperture: 'f/2'
+  },
 ];
 
 export const formatSize = (bytes) => {
@@ -275,3 +382,42 @@ export const getTagCategory = (tag) => {
   const langs = ['javascript', 'typescript', 'react', 'node.js', 'python', 'flask', 'django', 'c++', 'c#', 'rust', 'sql', 'swift', 'kotlin', 'go', 'java', 'unity'];
   return langs.some(l => t.includes(l)) ? 'Languages & Frameworks' : 'Tags & Topics';
 };
+
+// Chess Data
+export const CHESS_GAMES = [
+    {
+        id: 'immortal-game',
+        title: 'The Immortal Game',
+        white: 'Adolf Anderssen',
+        black: 'Lionel Kieseritzky',
+        date: '1851-06-21',
+        result: '1-0',
+        event: 'London',
+        pgn: `1. e4 e5 2. f4 exf4 3. Bc4 Qh4+ 4. Kf1 b5 5. Bxb5 Nf6 6. Nf3 Qh6 7. d3 Nh5 8. Nh4 Qg5 9. Nf5 c6 10. g4 Nf6 11. Rg1 cxb5 12. h4 Qg6 13. h5 Qg5 14. Qf3 Ng8 15. Bxf4 Qf6 16. Nc3 Bc5 17. Nd5 Qxb2 18. Bd6 Bxg1 19. e5 Qxa1+ 20. Ke2 Na6 21. Nxg7+ Kd8 22. Qf6+ Nxf6 23. Be7#`,
+        fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' 
+    },
+    {
+        id: 'opera-game',
+        title: 'The Opera Game',
+        white: 'Paul Morphy',
+        black: 'Duke/Count',
+        date: '1858-10-01',
+        result: '1-0',
+        event: 'Paris',
+        pgn: `1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3 Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5 11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7 Rxd7 14. Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8#`,
+        fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    }
+];
+
+export const CHESS_OPENINGS = [
+    {
+        id: 'kings-gambit',
+        title: "King's Gambit",
+        description: "A romantic and aggressive opening for White.",
+        lines: [
+            { name: "Accepted (3.Nf3)", pgn: "1. e4 e5 2. f4 exf4 3. Nf3" },
+            { name: "Bishop's Gambit", pgn: "1. e4 e5 2. f4 exf4 3. Bc4" },
+            { name: "Falkbeer Countergambit", pgn: "1. e4 e5 2. f4 d5" }
+        ]
+    }
+];
