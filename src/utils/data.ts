@@ -137,7 +137,7 @@ export const projectsData = [
     id: 10,
     title: 'Project-10',
     description: 'Real-time strategy game prototype.',
-    tags: [TAGS.UNITY.label, TAGS.GAME_DEV.label, TAGS.C_SHARP?.label || 'C#'],
+    tags: [TAGS.UNITY.label, TAGS.GAME_DEV.label, 'C#'],
     modified: '2025-12-05',
     created: '2025-05-10',
     sizeBytes: 450000000,
@@ -171,7 +171,6 @@ export const projectsData = [
   }
 ];
 
-// Blog Posts
 export const BLOG_POSTS = [
     { 
       id: 1, 
@@ -241,7 +240,6 @@ export const BLOG_POSTS = [
     },
 ];
 
-// Photos
 export const PHOTOS = [
   { 
       id: 1, 
@@ -367,23 +365,22 @@ export const PHOTOS = [
   },
 ];
 
-export const formatSize = (bytes) => {
+export const formatSize = (bytes: number): string => {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
-export const getTagColor = (tagLabel) => {
+export const getTagColor = (tagLabel: string): string => {
   const tagEntry = Object.values(TAGS).find(t => t.label === tagLabel);
   return tagEntry ? tagEntry.color : 'bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200';
 };
 
-export const getTagCategory = (tag) => {
+export const getTagCategory = (tag: string): string => {
   const t = tag.toLowerCase();
   const langs = ['javascript', 'typescript', 'react', 'node.js', 'python', 'flask', 'django', 'c++', 'c#', 'rust', 'sql', 'swift', 'kotlin', 'go', 'java', 'unity'];
   return langs.some(l => t.includes(l)) ? 'Languages & Frameworks' : 'Tags & Topics';
 };
 
-// Chess Data
 export const CHESS_GAMES = [
     {
         id: 'immortal-game',

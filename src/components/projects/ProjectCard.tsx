@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { getTagColor } from '../../utils/data';
+import { getTagColor } from '../../utils/data.ts';
 
-export const ProjectGridCard = ({ project }) => (
+export const ProjectGridCard = ({ project }: { project: any }) => (
   <Link to={`/projects/${project.title}`} className="group flex flex-col bg-zinc-200 dark:bg-[#18181b] rounded-lg overflow-hidden border border-transparent hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 h-64">
     <div className="p-[7px] bg-zinc-200 dark:bg-[#18181b] transition-colors duration-200">
         <div className="h-32 w-full bg-zinc-100 dark:bg-[#202024] rounded-sm flex items-center justify-center text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400 dark:group-hover:text-zinc-500 transition-colors">
@@ -14,7 +14,7 @@ export const ProjectGridCard = ({ project }) => (
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2 leading-relaxed">{project.description}</p>
         </div>
         <div className="flex items-center gap-1 mt-2 flex-nowrap overflow-hidden h-6">
-            {project.tags.map(t => <span key={t} className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded shrink-0 ${getTagColor(t)}`}>{t}</span>)}
+            {project.tags.map((t: string) => <span key={t} className={`inline-block px-2 py-0.5 text-[10px] font-bold rounded shrink-0 ${getTagColor(t)}`}>{t}</span>)}
         </div>
     </div>
   </Link>

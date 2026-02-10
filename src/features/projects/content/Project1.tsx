@@ -1,4 +1,4 @@
-import { ProjectSection, CodeSnippet } from '../components/common/CommonUI';
+import { ProjectSection, CodeSnippet } from '../../../components/common/CommonUI.tsx';
 
 export default function Project1() {
     return (

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { styles } from '../../utils/styles';
+import { styles } from '../../utils/styles.ts';
 
-export default function Navbar({ toggleTheme, currentTheme }) {
+export default function Navbar({ toggleTheme, currentTheme }: { toggleTheme: () => void; currentTheme: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchVal, setSearchVal] = useState('');
@@ -15,13 +15,12 @@ export default function Navbar({ toggleTheme, currentTheme }) {
     }
   };
 
-  const handleKeyDown = (e) => { if (e.key === 'Enter') { doSearch(); e.target.blur(); } };
+  const handleKeyDown = (e: React.KeyboardEvent) => { if (e.key === 'Enter') { doSearch(); (e.target as HTMLInputElement).blur(); } };
 
   return (
     <nav className="w-full bg-zinc-50 dark:bg-[#09090b] border-b border-zinc-200 dark:border-zinc-800 transition-colors duration-200 sticky top-0 z-50">
       <div className="mx-[10%] lg:mx-[18%] h-16 flex items-center justify-between relative bg-zinc-50 dark:bg-[#09090b] transition-colors duration-200 z-20">
         
-        {/* Logo & Links */}
         <div className="flex items-center gap-4 shrink-0 z-30">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`${styles.buttonIcon} lg:hidden -ml-2 rounded-full`}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -37,7 +36,6 @@ export default function Navbar({ toggleTheme, currentTheme }) {
           </div>
         </div>
 
-        {/* Desktop Search Bar - Original Split Design */}
         <div className="hidden 2xl:flex flex-1 justify-start px-4 pl-8">
             <div className="flex w-full max-w-2xl items-center">
                 <div className="flex flex-1 items-center bg-white dark:bg-[#121214] border border-zinc-300 dark:border-zinc-700 rounded-l-full px-4 py-1.5 shadow-sm focus-within:border-blue-500 overflow-hidden transition-colors duration-200">
@@ -57,7 +55,6 @@ export default function Navbar({ toggleTheme, currentTheme }) {
             </div>
         </div>
 
-        {/* Right Tools */}
         <div className="flex items-center gap-2 shrink-0 z-30">
            <button onClick={() => setMobileSearchOpen(!mobileSearchOpen)} className={`2xl:hidden ${styles.buttonIcon}`}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>

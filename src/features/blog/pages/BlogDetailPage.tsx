@@ -1,9 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
-import { BLOG_POSTS } from '../utils/data';
-import blogRegistry from '../blogs/registry';
-import { styles } from '../utils/styles';
+import { BLOG_POSTS } from '../../../utils/data.ts';
+import blogRegistry from '../content/registry.tsx';
+import { styles } from '../../../utils/styles.ts';
 
-export default function BlogDetail() {
+export default function BlogDetailPage() {
   const { id } = useParams();
   const post = BLOG_POSTS.find(p => p.title === id);
   

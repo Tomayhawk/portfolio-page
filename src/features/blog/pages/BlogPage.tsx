@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PageHeader } from '../components/common/CommonUI';
-import { styles } from '../utils/styles';
-import { BLOG_POSTS } from '../utils/data';
+import { PageHeader } from '../../../components/common/CommonUI.tsx';
+import { styles } from '../../../utils/styles.ts';
+import { BLOG_POSTS } from '../../../utils/data.ts';
 
-export default function Blog() {
+export default function BlogPage() {
   const [filter, setFilter] = useState('All');
   
   const categories = ['All', 'Projects', 'Photography', 'Chess', 'Activity'];
@@ -17,7 +17,6 @@ export default function Blog() {
     <div className="max-w-full">
       <PageHeader title="Blog" description="Thoughts, tutorials, and devlogs." />
       
-      {/* Filter */}
       <div className="flex gap-2 mb-10 overflow-x-auto pb-2 custom-scrollbar">
         {categories.map(cat => (
             <button

@@ -1,24 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PageHeader, Tag } from '../components/common/CommonUI';
-import { ProjectGridCard } from '../components/projects/ProjectCard';
-import { useProjectFilters } from '../hooks/useProjectFilters';
-// Added getTagCategory to imports
-import { formatSize, getTagCategory } from '../utils/data';
-import { styles } from '../utils/styles';
+import { PageHeader, Tag } from '../../../components/common/CommonUI.tsx';
+import { ProjectGridCard } from '../../../components/projects/ProjectCard.tsx';
+import { useProjectFilters } from '../../../hooks/useProjectFilters.ts';
+import { formatSize, getTagCategory } from '../../../utils/data.ts';
+import { styles } from '../../../utils/styles.ts';
 
-// --- Helper Components ---
-
-// Change this component definition at the top of your file
-const ListHeaderCell = ({ label, field, sortConfig, onSort, align = 'left', allowReverse = true, showArrow = true }) => (
+const ListHeaderCell = ({ label, field, sortConfig, onSort, align = 'left', allowReverse = true, showArrow = true }: any) => (
   <div onClick={() => onSort(field, allowReverse)} className={`cursor-pointer hover:text-black dark:hover:text-white flex items-center gap-1 transition-colors text-${align} ${sortConfig.key === field ? 'text-blue-600 dark:text-blue-400' : ''}`}>
     {label} 
-    {/* Add showArrow check here */}
     {showArrow && sortConfig.key === field && <span>{sortConfig.dir === 'asc' ? '↑' : '↓'}</span>}
   </div>
 );
 
-const FilterTag = ({ tag, isSelected, onClick }) => (
+const FilterTag = ({ tag, isSelected, onClick }: any) => (
   <button 
     onClick={() => onClick(tag)} 
     className={`text-xs px-2 py-1 rounded border transition-colors ${
@@ -31,7 +26,7 @@ const FilterTag = ({ tag, isSelected, onClick }) => (
   </button>
 );
 
-const MatchModeToggle = ({ label, value, current, onChange }) => (
+const MatchModeToggle = ({ label, value, current, onChange }: any) => (
   <button 
     onClick={() => onChange(value)} 
     className={`px-2 py-0.5 text-[10px] rounded transition-colors ${
@@ -44,7 +39,7 @@ const MatchModeToggle = ({ label, value, current, onChange }) => (
   </button>
 );
 
-const Dropdown = ({ label, current, options, onSelect, name, activeDropdown, toggleDropdown }) => (
+const Dropdown = ({ label, current, options, onSelect, name, activeDropdown, toggleDropdown }: any) => (
     <div className="relative" onClick={(e) => e.stopPropagation()}>
       <button onClick={() => toggleDropdown(name)} className="flex items-center gap-1 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 px-2 py-1 rounded transition-colors whitespace-nowrap">
         {label && <span className="text-zinc-500 dark:text-zinc-500">{label}:</span>} <span className="text-zinc-800 dark:text-zinc-200">{current}</span>
@@ -52,7 +47,7 @@ const Dropdown = ({ label, current, options, onSelect, name, activeDropdown, tog
       </button>
       {activeDropdown === name && (
         <div className="absolute top-full left-0 mt-1 w-48 max-h-60 overflow-y-auto bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-xl z-20">
-          {options.map((opt, i) => (
+          {options.map((opt: any, i: number) => (
             <button key={i} onClick={() => { onSelect(opt); toggleDropdown(null); }} className="w-full text-left px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700">
               {typeof opt === 'object' ? opt.label : opt}
             </button>
@@ -62,14 +57,14 @@ const Dropdown = ({ label, current, options, onSelect, name, activeDropdown, tog
     </div>
 );
 
-export default function Projects() {
+export default function ProjectsPage() {
   const { layout, setLayout, langFilter, setLangFilter, timeFilter, setTimeFilter, isAdvancedOpen, setIsAdvancedOpen, searchQuery, setSearchQuery, selectedTags, tagMatchMode, setTagMatchMode, sizeRange, setSizeRange, sortConfig, setSortConfig, showCustomDate, setCustomStart, setCustomEnd, filteredProjects, resetFilters, toggleTag, allTags, langOptions } = useProjectFilters();
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const toggleDropdown = (name) => setActiveDropdown(activeDropdown === name ? null : name);
+  const toggleDropdown = (name: any) => setActiveDropdown(activeDropdown === name ? null : name);
 
   useEffect(() => { const fn = () => setActiveDropdown(null); window.addEventListener('click', fn); return () => window.removeEventListener('click', fn); }, []);
 
-  const handleListSort = (field, allowReverse = true) => {
+  const handleListSort = (field: string, allowReverse = true) => {
       if (sortConfig.key === field && allowReverse) {
           setSortConfig({ ...sortConfig, dir: sortConfig.dir === 'asc' ? 'desc' : 'asc' });
       } else {
@@ -96,13 +91,11 @@ export default function Projects() {
         {isAdvancedOpen && (
             <div className="mb-6 bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 shadow-sm animate-fadeIn">
                 <div className="flex flex-col gap-4">
-                     {/* Search Input */}
-                    <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-2 focus-within:ring-2 ring-blue-500/50">
+                     <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-2 focus-within:ring-2 ring-blue-500/50">
                         <svg className="w-5 h-5 text-zinc-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search (e.g. tag:Python -tag:React)..." className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
                     </div>
                     
-                    {/* Syntax Helper */}
                     <details className="text-xs text-zinc-500 cursor-pointer select-none">
                         <summary className="hover:text-blue-500 transition-colors">Show Search Syntax Helper</summary>
                         <div className="mt-2 p-3 bg-zinc-50 dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -121,7 +114,6 @@ export default function Projects() {
                         <button onClick={resetFilters} className="text-xs text-blue-600 dark:text-blue-400 hover:underline">Reset filters</button>
                     </div>
 
-                    {/* Languages - Vertical */}
                     <div>
                         <div className="flex justify-between items-center mb-2">
                             <h4 className="text-xs font-bold uppercase text-zinc-500">Languages & Frameworks</h4>
@@ -131,23 +123,21 @@ export default function Projects() {
                              </div>
                         </div>
                         <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
-                            {allTags.filter(t => getTagCategory(t) === 'Languages & Frameworks').map(tag => (
+                            {allTags.filter((t: string) => getTagCategory(t) === 'Languages & Frameworks').map((tag: string) => (
                                 <FilterTag key={tag} tag={tag} isSelected={selectedTags.has(tag)} onClick={toggleTag} />
                             ))}
                         </div>
                     </div>
 
-                    {/* Other Tags - Vertical */}
                     <div>
                         <h4 className="text-xs font-bold uppercase text-zinc-500 mb-2">Other Tags and Topics</h4>
                         <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
-                            {allTags.filter(t => getTagCategory(t) === 'Tags & Topics').map(tag => (
+                            {allTags.filter((t: string) => getTagCategory(t) === 'Tags & Topics').map((tag: string) => (
                                 <FilterTag key={tag} tag={tag} isSelected={selectedTags.has(tag)} onClick={toggleTag} />
                             ))}
                         </div>
                     </div>
 
-                    {/* Size Range */}
                     <div className="max-w-sm">
                         <h4 className="text-xs font-bold uppercase text-zinc-500 mb-2">Size Range (MB)</h4>
                         <div className="flex items-center gap-2">
@@ -170,7 +160,7 @@ export default function Projects() {
                 <div className="flex items-center gap-4 flex-wrap">
                     <Dropdown name="lang" label="Languages" current={langFilter} options={langOptions} onSelect={setLangFilter} activeDropdown={activeDropdown} toggleDropdown={toggleDropdown} />
                     <div className="flex items-center gap-2">
-                        <Dropdown name="time" label="Modified" current={timeFilter} options={['Any time', 'Last 7 days', 'Last 30 days', 'Last 90 days', 'This Year', 'Last year', 'Custom Range']} onSelect={(v) => { setTimeFilter(v); }} activeDropdown={activeDropdown} toggleDropdown={toggleDropdown} />
+                        <Dropdown name="time" label="Modified" current={timeFilter} options={['Any time', 'Last 7 days', 'Last 30 days', 'Last 90 days', 'This Year', 'Last year', 'Custom Range']} onSelect={(v: string) => { setTimeFilter(v); }} activeDropdown={activeDropdown} toggleDropdown={toggleDropdown} />
                         
                         {showCustomDate && (
                             <div className="flex items-center gap-2 animate-fadeIn ml-2">
@@ -190,13 +180,13 @@ export default function Projects() {
                     <button onClick={() => setLayout('grid')} className="relative z-10 p-1.5 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg></button>
                 </div>
             </div>
-            {layout === 'grid' && <div className="flex items-center gap-2"><Dropdown name="sort" label="Sort by" current={currentSortLabel} options={sortOptions} onSelect={(opt) => setSortConfig({ key: opt.key, dir: opt.dir })} activeDropdown={activeDropdown} toggleDropdown={toggleDropdown} /></div>}
+            {layout === 'grid' && <div className="flex items-center gap-2"><Dropdown name="sort" label="Sort by" current={currentSortLabel} options={sortOptions} onSelect={(opt: any) => setSortConfig({ key: opt.key, dir: opt.dir })} activeDropdown={activeDropdown} toggleDropdown={toggleDropdown} /></div>}
         </div>
       </div>
 
       {layout === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 pb-20">
-            {filteredProjects.map(p => <ProjectGridCard key={p.id} project={p} />)}
+            {filteredProjects.map((p: any) => <ProjectGridCard key={p.id} project={p} />)}
           </div>
       ) : (
           <div className="w-full text-sm text-zinc-800 dark:text-zinc-200 pb-20 overflow-x-auto">
@@ -209,11 +199,11 @@ export default function Projects() {
                   <ListHeaderCell field="size" label="Size" sortConfig={sortConfig} onSort={handleListSort} />
               </div>
               <div className="flex flex-col min-w-[1000px]">
-                  {filteredProjects.map(p => (
+                  {filteredProjects.map((p: any) => (
                       <Link to={`/projects/${p.title}`} key={p.id} className={`${styles.gridListHeader} h-14 border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 items-center transition-colors group`}>
                           <div className="flex items-center gap-3 truncate font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-left"><span className="truncate">{p.title}</span></div>
                           <div className="text-zinc-500 dark:text-zinc-400 truncate text-left">{p.description}</div>
-                          <div className="flex items-center gap-2 overflow-hidden h-full text-left flex-nowrap"><div className="flex items-center gap-2">{p.tags.map(t => <Tag key={t} text={t} className="shrink-0" />)}</div></div>
+                          <div className="flex items-center gap-2 overflow-hidden h-full text-left flex-nowrap"><div className="flex items-center gap-2">{p.tags.map((t: string) => <Tag key={t} text={t} className="shrink-0" />)}</div></div>
                           <div className="text-zinc-500 dark:text-zinc-400 text-xs truncate text-left">{new Date(p.created).toLocaleDateString()}</div>
                           <div className="text-zinc-500 dark:text-zinc-400 text-xs truncate text-left">{new Date(p.modified).toLocaleDateString()}</div>
                           <div className="text-zinc-500 dark:text-zinc-400 text-xs truncate text-left font-mono">{formatSize(p.sizeBytes)}</div>

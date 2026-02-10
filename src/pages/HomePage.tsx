@@ -1,8 +1,8 @@
-import { projectsData } from '../utils/data';
-import { ProjectGridCard } from '../components/projects/ProjectCard';
-import { styles } from '../utils/styles';
+import { projectsData } from '../utils/data.ts';
+import { ProjectGridCard } from '../components/projects/ProjectCard.tsx';
+import { styles } from '../utils/styles.ts';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="flex flex-col min-h-[75vh] justify-between">
       <div className="py-20 text-center">

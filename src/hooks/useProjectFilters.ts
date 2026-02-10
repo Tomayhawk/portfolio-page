@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { projectsData, getTagCategory } from '../utils/data';
+import { projectsData, getTagCategory } from '../utils/data.ts';
 
 export function useProjectFilters() {
   const [layout, setLayout] = useState('grid');
@@ -10,7 +10,6 @@ export function useProjectFilters() {
   const [selectedTags, setSelectedTags] = useState(new Set());
   const [tagMatchMode, setTagMatchMode] = useState('all');
   const [sizeRange, setSizeRange] = useState({ min: '', max: '' });
-  // Default sort: Name A-Z
   const [sortConfig, setSortConfig] = useState({ key: 'name', dir: 'asc' });
   const [showCustomDate, setShowCustomDate] = useState(false);
   const [customStart, setCustomStart] = useState('');
@@ -19,7 +18,7 @@ export function useProjectFilters() {
   const allTags = Array.from(new Set(projectsData.flatMap(p => p.tags))).sort();
   const langOptions = ['All', ...allTags.filter(t => getTagCategory(t) === 'Languages & Frameworks')];
 
-  const handleTimeFilterChange = (val) => {
+  const handleTimeFilterChange = (val: string) => {
       setTimeFilter(val);
       if (val === 'Custom Range') {
           setShowCustomDate(true);
@@ -30,7 +29,7 @@ export function useProjectFilters() {
       }
   };
 
-  const toggleTag = (tag) => {
+  const toggleTag = (tag: string) => {
       const newTags = new Set(selectedTags);
       newTags.has(tag) ? newTags.delete(tag) : newTags.add(tag);
       setSelectedTags(newTags);
@@ -46,13 +45,12 @@ export function useProjectFilters() {
     setShowCustomDate(false);
     setCustomStart('');
     setCustomEnd('');
-    // Reset sort to Name A-Z
     setSortConfig({ key: 'name', dir: 'asc' });
   };
 
-  const parseAdvancedSearch = (query) => {
+  const parseAdvancedSearch = (query: string) => {
       const terms = query.toLowerCase().split(/\s+/);
-      const criteria = { text: [], includeTags: [], excludeTags: [], anyTags: [], minSize: 0, maxSize: Infinity, sort: null };
+      const criteria: any = { text: [], includeTags: [], excludeTags: [], anyTags: [], minSize: 0, maxSize: Infinity, sort: null };
       
       terms.forEach(term => {
           if (term.startsWith('tag:')) criteria.includeTags.push(term.replace('tag:', '').replace(/_/g, ' '));
@@ -62,11 +60,14 @@ export function useProjectFilters() {
           else if (term.startsWith('size:')) {
               const val = term.replace('size:', '');
               const match = val.match(/^([<>]=?)?(\d+(\.\d+)?)(kb|mb|gb|b)?$/);
-              if (match) {
-                  const [, op, num, , unit] = match;
-                  let bytes = parseFloat(num) * (unit === 'kb' ? 1024 : unit === 'gb' ? 1024**3 : unit === 'b' ? 1 : 1024**2);
+              if (match && match[2]) {
+                  const op = match[1];
+                  const num = match[2];
+                  const unit = match[4];
+                  let bytes = parseFloat(num) * ((unit || 'mb') === 'kb' ? 1024 : (unit || 'mb') === 'gb' ? 1024**3 : (unit || 'mb') === 'b' ? 1 : 1024**2);
                   if (op === '<') criteria.maxSize = Math.min(criteria.maxSize, bytes);
-                  else if (op === '>') criteria.minSize = Math.max(criteria.minSize, bytes);
+                  else if (op === '>' || op === '>=') criteria.minSize = Math.max(criteria.minSize, bytes);
+                  else if (op === '<=' && op !== undefined) criteria.maxSize = Math.min(criteria.maxSize, bytes);
               }
           }
           else criteria.text.push(term);
@@ -79,14 +80,14 @@ export function useProjectFilters() {
     const sc = parseAdvancedSearch(searchQuery);
     
     let result = projectsData.filter(p => {
-        if (sc.includeTags.length && !sc.includeTags.every(t => p.tags.some(pt => pt.toLowerCase().includes(t)))) return false;
-        if (sc.excludeTags.length && sc.excludeTags.some(t => p.tags.some(pt => pt.toLowerCase().includes(t)))) return false;
-        if (sc.anyTags.length && !sc.anyTags.some(t => p.tags.some(pt => pt.toLowerCase().includes(t)))) return false;
+        if (sc.includeTags.length && !sc.includeTags.every((t: string) => p.tags.some((pt: string) => pt.toLowerCase().includes(t)))) return false;
+        if (sc.excludeTags.length && sc.excludeTags.some((t: string) => p.tags.some((pt: string) => pt.toLowerCase().includes(t)))) return false;
+        if (sc.anyTags.length && !sc.anyTags.some((t: string) => p.tags.some((pt: string) => pt.toLowerCase().includes(t)))) return false;
         if (p.sizeBytes < sc.minSize || p.sizeBytes > sc.maxSize) return false;
-        if (sc.text.length && !sc.text.every(term => `${p.title} ${p.description} ${p.tags.join(' ')}`.toLowerCase().includes(term))) return false;
+        if (sc.text.length && !sc.text.every((term: string) => `${p.title} ${p.description} ${p.tags.join(' ')}`.toLowerCase().includes(term))) return false;
         
         if (selectedTags.size > 0) {
-            const hasTags = Array.from(selectedTags).filter(t => p.tags.includes(t));
+            const hasTags = Array.from(selectedTags).filter((t: any) => p.tags.includes(t));
             if (tagMatchMode === 'all' && hasTags.length !== selectedTags.size) return false;
             if (tagMatchMode === 'any' && hasTags.length === 0) return false;
         }
@@ -96,48 +97,34 @@ export function useProjectFilters() {
         if (langFilter !== 'All' && !p.tags.includes(langFilter)) return false;
         
         const pDate = new Date(p.modified);
-        if (timeFilter === 'Last 7 days' && now - pDate > 7 * 86400000) return false;
-        if (timeFilter === 'Last 30 days' && now - pDate > 30 * 86400000) return false;
-        if (timeFilter === 'Last 90 days' && now - pDate > 90 * 86400000) return false;
-        if (timeFilter === 'Last year' && now - pDate > 365 * 86400000) return false;
+        if (timeFilter === 'Last 7 days' && now.getTime() - pDate.getTime() > 7 * 86400000) return false;
+        if (timeFilter === 'Last 30 days' && now.getTime() - pDate.getTime() > 30 * 86400000) return false;
+        if (timeFilter === 'Last 90 days' && now.getTime() - pDate.getTime() > 90 * 86400000) return false;
         if (timeFilter === 'This Year' && pDate.getFullYear() !== now.getFullYear()) return false;
+        if (timeFilter === 'Last year' && pDate.getFullYear() !== now.getFullYear() - 1) return false;
         if (timeFilter === 'Custom Range' && customStart && customEnd) {
-            const start = new Date(customStart), end = new Date(customEnd);
-            end.setHours(23,59,59,999);
+            const start = new Date(customStart);
+            const end = new Date(customEnd);
             if (pDate < start || pDate > end) return false;
         }
         return true;
     });
 
-    const sort = sc.sort || sortConfig;
-    return result.sort((a, b) => {
-      let res = 0;
-      if (sort.key === 'name') res = a.title.localeCompare(b.title);
-      else if (sort.key === 'modified') res = new Date(a.modified) - new Date(b.modified);
-      else if (sort.key === 'created') res = new Date(a.created) - new Date(b.created);
-      else if (sort.key === 'size') res = a.sizeBytes - b.sizeBytes;
-      else if (sort.key === 'tags') res = (a.tags[0]||'').localeCompare(b.tags[0]||'');
-      return sort.dir === 'asc' ? res : -res;
+    result.sort((a: any, b: any) => {
+        let aVal, bVal;
+        if (sortConfig.key === 'name') { aVal = a.title; bVal = b.title; }
+        else if (sortConfig.key === 'modified') { aVal = new Date(a.modified).getTime(); bVal = new Date(b.modified).getTime(); }
+        else if (sortConfig.key === 'created') { aVal = new Date(a.created).getTime(); bVal = new Date(b.created).getTime(); }
+        else if (sortConfig.key === 'size') { aVal = a.sizeBytes; bVal = b.sizeBytes; }
+        else if (sortConfig.key === 'tags') { aVal = a.tags.join(','); bVal = b.tags.join(','); }
+        
+        if (aVal < bVal) return sortConfig.dir === 'asc' ? -1 : 1;
+        if (aVal > bVal) return sortConfig.dir === 'asc' ? 1 : -1;
+        return 0;
     });
+
+    return result;
   })();
 
-  return {
-    layout, setLayout,
-    langFilter, setLangFilter,
-    timeFilter, setTimeFilter: handleTimeFilterChange,
-    isAdvancedOpen, setIsAdvancedOpen,
-    searchQuery, setSearchQuery,
-    selectedTags, setSelectedTags,
-    tagMatchMode, setTagMatchMode,
-    sizeRange, setSizeRange,
-    sortConfig, setSortConfig,
-    showCustomDate, setShowCustomDate,
-    customStart, setCustomStart,
-    customEnd, setCustomEnd,
-    filteredProjects,
-    resetFilters,
-    toggleTag,
-    allTags,
-    langOptions
-  };
+  return { layout, setLayout, langFilter, setLangFilter, timeFilter, setTimeFilter, isAdvancedOpen, setIsAdvancedOpen, searchQuery, setSearchQuery, selectedTags, tagMatchMode, setTagMatchMode, sizeRange, setSizeRange, sortConfig, setSortConfig, showCustomDate, setCustomStart, setCustomEnd, filteredProjects, resetFilters, toggleTag, allTags, langOptions, handleTimeFilterChange };
 }

@@ -1,4 +1,7 @@
-node_modules
+/dist
+/node_modules
 /public/photos
+/src/vite-env.d.ts
 eslint.config.js
+vite.config.js
 *.json

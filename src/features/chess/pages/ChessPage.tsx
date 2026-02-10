@@ -1,7 +1,7 @@
-import { PageHeader } from '../components/common/CommonUI';
-import { styles } from '../utils/styles';
+import { PageHeader } from '../../../components/common/CommonUI.tsx';
+import { styles } from '../../../utils/styles.ts';
 
-export default function Chess() {
+export default function ChessPage() {
   return (
     <div className="max-w-full">
       <div className="text-center md:text-left">

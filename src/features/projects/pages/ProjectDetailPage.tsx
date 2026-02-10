@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
-import { projectsData, getTagColor } from '../utils/data';
-import projectRegistry from '../projects/registry';
-import { MetadataBox } from '../components/common/MetadataBox';
-import { styles } from '../utils/styles';
+import { projectsData, getTagColor } from '../../../utils/data.ts';
+import projectRegistry from '../content/registry.tsx';
+import { MetadataBox } from '../../../components/common/MetadataBox.tsx';
+import { styles } from '../../../utils/styles.ts';
 
-export default function ProjectDetail() {
+export default function ProjectDetailPage() {
   const { id } = useParams();
   const project = projectsData.find(p => p.title === id);
   
@@ -26,7 +26,7 @@ export default function ProjectDetail() {
                     <MetadataBox project={project} />
                     <div>
                         <h3 className="text-xs font-bold uppercase text-zinc-400 mb-2 tracking-wider px-1">Tags</h3>
-                        <div className="flex flex-wrap gap-2">{project.tags.map(t => <span key={t} className={`${styles.tagBase} ${getTagColor(t)}`}>{t}</span>)}</div>
+                        <div className="flex flex-wrap gap-2">{project.tags.map((t: string) => <span key={t} className={`${styles.tagBase} ${getTagColor(t)}`}>{t}</span>)}</div>
                     </div>
                  </div>
                  
@@ -39,7 +39,7 @@ export default function ProjectDetail() {
                     <MetadataBox project={project} />
                     <div>
                         <h3 className="text-xs font-bold uppercase text-zinc-400 mb-3 tracking-wider px-1">Tags</h3>
-                        <div className="flex flex-wrap gap-2">{project.tags.map(t => <span key={t} className={`${styles.tagBase} ${getTagColor(t)}`}>{t}</span>)}</div>
+                        <div className="flex flex-wrap gap-2">{project.tags.map((t: string) => <span key={t} className={`${styles.tagBase} ${getTagColor(t)}`}>{t}</span>)}</div>
                     </div>
                 </div>
             </div>

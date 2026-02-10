@@ -1,8 +1,7 @@
-import Blog1 from './Blog1';
-import { ProjectSection } from '../components/common/CommonUI';
+import Blog1 from './Blog1.tsx';
+import { ProjectSection } from '../../../components/common/CommonUI.tsx';
 
-// Placeholder for other blogs
-const PlaceholderBlog = ({ title }) => (
+const PlaceholderBlog = ({ title }: { title: string }) => (
     <div className="animate-fadeIn">
         <ProjectSection>
             <p className="italic text-zinc-500">This is a temporary placeholder for the blog post: <strong>{title}</strong>.</p>
@@ -11,7 +10,7 @@ const PlaceholderBlog = ({ title }) => (
     </div>
 );
 
-const blogRegistry = {
+const blogRegistry: Record<string, any> = {
   'Building a Portfolio with React': Blog1,
   'Why I Switch to Linux': () => <PlaceholderBlog title="Why I Switch to Linux" />,
   'Understanding AsyncIO in Python': () => <PlaceholderBlog title="Understanding AsyncIO in Python" />,

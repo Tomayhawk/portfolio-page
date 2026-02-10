@@ -1,28 +1,28 @@
 import { useState, useEffect } from 'react';
-import { PageHeader } from '../components/common/CommonUI';
-import { PHOTOS } from '../utils/data';
+import { PageHeader } from '../../../components/common/CommonUI.tsx';
+import { PHOTOS } from '../../../utils/data.ts';
 
-export default function Photography() {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+export default function PhotographyPage() {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [layoutMode, setLayoutMode] = useState('side-view');
 
-  const handleNext = (e) => {
+  const handleNext = (e?: React.MouseEvent) => {
       e?.stopPropagation();
-      if (selectedIndex < PHOTOS.length - 1) {
-          setSelectedIndex((prev) => prev + 1);
+      if (selectedIndex !== null && selectedIndex < PHOTOS.length - 1) {
+          setSelectedIndex((prev) => (prev !== null ? prev + 1 : 0));
       }
   };
 
-  const handlePrev = (e) => {
+  const handlePrev = (e?: React.MouseEvent) => {
       e?.stopPropagation();
-      if (selectedIndex > 0) {
-          setSelectedIndex((prev) => prev - 1);
+      if (selectedIndex !== null && selectedIndex > 0) {
+          setSelectedIndex((prev) => (prev !== null ? prev - 1 : 0));
       }
   };
 
-  const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight' && selectedIndex < PHOTOS.length - 1) handleNext();
-      if (e.key === 'ArrowLeft' && selectedIndex > 0) handlePrev();
+  const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' && selectedIndex !== null && selectedIndex < PHOTOS.length - 1) handleNext();
+      if (e.key === 'ArrowLeft' && selectedIndex !== null && selectedIndex > 0) handlePrev();
       if (e.key === 'Escape') setSelectedIndex(null);
   };
 

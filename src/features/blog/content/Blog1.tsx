@@ -1,4 +1,4 @@
-import { ProjectSection } from '../components/common/CommonUI';
+import { ProjectSection } from '../../../components/common/CommonUI.tsx';
 
 export default function Blog1() {
     return (
