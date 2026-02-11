@@ -1,6 +1,6 @@
 /dist
 /node_modules
-/public/photos
+/public
 /src/vite-env.d.ts
 eslint.config.js
 vite.config.js

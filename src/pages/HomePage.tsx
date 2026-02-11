@@ -1,5 +1,5 @@
 import { projectsData } from '../utils/data.ts';
-import { ProjectGridCard } from '../components/projects/ProjectCard.tsx';
+import { ProjectGridCard } from '../components/ProjectCard.tsx';
 import { styles } from '../utils/styles.ts';
 
 export default function HomePage() {

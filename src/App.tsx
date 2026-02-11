@@ -1,15 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout.tsx';
+import Layout from './components/Layout.tsx';
 import HomePage from './pages/HomePage.tsx';
-import BlogPage from './features/blog/pages/BlogPage.tsx';
-import BlogDetailPage from './features/blog/pages/BlogDetailPage.tsx';
-import ProjectsPage from './features/projects/pages/ProjectsPage.tsx';
-import ProjectDetailPage from './features/projects/pages/ProjectDetailPage.tsx';
-import PhotographyPage from './features/photography/pages/PhotographyPage.tsx';
-import ChessPage from './features/chess/pages/ChessPage.tsx';
-import ChessGameDetailPage from './features/chess/pages/ChessGameDetailPage.tsx';
-import ChessOpeningDetailPage from './features/chess/pages/ChessOpeningDetailPage.tsx';
-import SearchResultsPage from './features/search/pages/SearchResultsPage.tsx';
+import BlogPage from './pages/blog/BlogPage.tsx';
+import BlogEntry from './pages/blog/BlogEntry.tsx';
+import ProjectsPage from './pages/projects/ProjectsPage.tsx';
+import ProjectEntry from './pages/projects/ProjectEntry.tsx';
+import PhotographyPage from './pages/photography/PhotographyPage.tsx';
+import ChessPage from './pages/chess/ChessPage.tsx';
+import ChessEntry from './pages/chess/ChessEntry.tsx';
+import SearchResultsPage from './pages/SearchResultsPage.tsx';
 
 export default function App() {
   return (
@@ -17,13 +16,13 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:id" element={<BlogDetailPage />} />
+          <Route path="/blog/:id" element={<BlogEntry />} />
           <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/projects/:id" element={<ProjectDetailPage />} />
+          <Route path="/projects/:id" element={<ProjectEntry />} />
           <Route path="/photography" element={<PhotographyPage />} />
           <Route path="/chess" element={<ChessPage />} />
-          <Route path="/chess/game/:id" element={<ChessGameDetailPage />} />
-          <Route path="/chess/opening/:id" element={<ChessOpeningDetailPage />} />
+          <Route path="/chess/game/:id" element={<ChessEntry />} />
+          <Route path="/chess/opening/:id" element={<ChessEntry />} />
           <Route path="/search" element={<SearchResultsPage />} />
         </Routes>
     </Layout>
