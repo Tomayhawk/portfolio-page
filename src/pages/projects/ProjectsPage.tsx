@@ -16,11 +16,7 @@ const ListHeaderCell = ({ label, field, sortConfig, onSort, align = 'left', allo
 const FilterTag = ({ tag, isSelected, onClick }: any) => (
   <button 
     onClick={() => onClick(tag)} 
-    className={`text-xs px-2 py-1 rounded border transition-colors ${
-      isSelected 
-        ? 'bg-blue-100 border-blue-300 text-blue-800 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-100' 
-        : 'bg-zinc-50 border-zinc-200 text-zinc-600 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-    }`}
+    className={`${styles.projectsToggleBtn} ${isSelected ? 'bg-blue-100 border-blue-300 text-blue-800 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-100' : 'bg-zinc-50 border-zinc-200 text-zinc-600 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
   >
     {tag}
   </button>
@@ -29,11 +25,7 @@ const FilterTag = ({ tag, isSelected, onClick }: any) => (
 const MatchModeToggle = ({ label, value, current, onChange }: any) => (
   <button 
     onClick={() => onChange(value)} 
-    className={`px-2 py-0.5 text-[10px] rounded transition-colors ${
-      current === value 
-        ? 'bg-white dark:bg-zinc-700 shadow-sm text-black dark:text-white' 
-        : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
-    }`}
+    className={`${styles.projectsToggleBtn} ${current === value ? 'bg-white dark:bg-zinc-700 shadow-sm text-black dark:text-white' : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
   >
     {label}
   </button>
@@ -41,9 +33,9 @@ const MatchModeToggle = ({ label, value, current, onChange }: any) => (
 
 const Dropdown = ({ label, current, options, onSelect, name, activeDropdown, toggleDropdown }: any) => (
     <div className="relative" onClick={(e) => e.stopPropagation()}>
-      <button onClick={() => toggleDropdown(name)} className="flex items-center gap-1 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 px-2 py-1 rounded transition-colors whitespace-nowrap">
+      <button onClick={() => toggleDropdown(name)} className={`${styles.projectsToggleBtn} ${styles.projectsToggleBtn.includes('px-2') ? '' : ''}`}>
         {label && <span className="text-zinc-500 dark:text-zinc-500">{label}:</span>} <span className="text-zinc-800 dark:text-zinc-200">{current}</span>
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        <svg className={styles.iconMd} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
       </button>
       {activeDropdown === name && (
         <div className="absolute top-full left-0 mt-1 w-48 max-h-60 overflow-y-auto bg-white dark:bg-[#18181b] border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-xl z-20">
@@ -89,16 +81,16 @@ export default function ProjectsPage() {
       <PageHeader title="Projects" description="A collection of my programming work and experiments." />
       <div className="flex flex-col mb-6">
         {isAdvancedOpen && (
-            <div className="mb-6 bg-white dark:bg-[#121214] border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 shadow-sm animate-fadeIn">
-                <div className="flex flex-col gap-4">
-                     <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-2 focus-within:ring-2 ring-blue-500/50">
-                        <svg className="w-5 h-5 text-zinc-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                        <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search (e.g. tag:Python -tag:React)..." className="w-full bg-transparent text-sm text-zinc-800 dark:text-zinc-200 focus:outline-none placeholder-zinc-500" />
-                    </div>
+            <div className={styles.projectsAdvancedBox}>
+              <div className={styles.projectsSearchRow}>
+                 <div className={styles.projectsSearchInputWrapper}>
+                  <svg className={styles.projectsSearchIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                  <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search (e.g. tag:Python -tag:React)..." className={styles.projectsSearchInput} />
+                </div>
                     
                     <details className="text-xs text-zinc-500 cursor-pointer select-none">
                         <summary className="hover:text-blue-500 transition-colors">Show Search Syntax Helper</summary>
-                        <div className="mt-2 p-3 bg-zinc-50 dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div className={styles.projectsSearchHelperBox}>
                              <div><span className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 rounded">tag:python</span> : Must include tag</div>
                              <div><span className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 rounded">+tag:python</span> : Same as tag:</div>
                              <div><span className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 rounded">-tag:java</span> : Must exclude tag</div>
@@ -109,18 +101,18 @@ export default function ProjectsPage() {
                         </div>
                     </details>
 
-                    <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800 pb-2">
-                        <h3 className="text-xs font-bold uppercase text-zinc-400">Filters</h3>
-                        <button onClick={resetFilters} className="text-xs text-blue-600 dark:text-blue-400 hover:underline">Reset filters</button>
+                    <div className={styles.projectsFiltersHeader}>
+                      <h3 className={styles.projectsFiltersTitle}>Filters</h3>
+                      <button onClick={resetFilters} className={styles.projectsResetBtn}>Reset filters</button>
                     </div>
 
                     <div>
                         <div className="flex justify-between items-center mb-2">
-                            <h4 className="text-xs font-bold uppercase text-zinc-500">Languages & Frameworks</h4>
-                             <div className="flex bg-zinc-100 dark:bg-zinc-800 rounded p-0.5">
-                                <MatchModeToggle label="Match All" value="all" current={tagMatchMode} onChange={setTagMatchMode} />
-                                <MatchModeToggle label="Match Any" value="any" current={tagMatchMode} onChange={setTagMatchMode} />
-                             </div>
+                           <h4 className="text-xs font-bold uppercase text-zinc-500">Languages & Frameworks</h4>
+                            <div className="flex bg-zinc-100 dark:bg-zinc-800 rounded p-0.5">
+                              <MatchModeToggle label="Match All" value="all" current={tagMatchMode} onChange={setTagMatchMode} />
+                              <MatchModeToggle label="Match Any" value="any" current={tagMatchMode} onChange={setTagMatchMode} />
+                            </div>
                         </div>
                         <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                             {allTags.filter((t: string) => getTagCategory(t) === 'Languages & Frameworks').map((tag: string) => (
@@ -139,18 +131,18 @@ export default function ProjectsPage() {
                     </div>
 
                     <div className="max-w-sm">
-                        <h4 className="text-xs font-bold uppercase text-zinc-500 mb-2">Size Range (MB)</h4>
-                        <div className="flex items-center gap-2">
-                            <div className="relative">
-                                <span className="absolute left-2 top-1.5 text-xs text-zinc-400">Min</span>
-                                <input type="number" value={sizeRange.min} onChange={(e) => setSizeRange({...sizeRange, min: e.target.value})} className="w-20 pl-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-2 py-1 text-sm text-zinc-700 dark:text-zinc-200 focus:border-blue-500 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
-                            </div>
-                            <span className="text-zinc-300 dark:text-zinc-600">-</span>
-                            <div className="relative">
-                                <span className="absolute left-2 top-1.5 text-xs text-zinc-400">Max</span>
-                                <input type="number" value={sizeRange.max} onChange={(e) => setSizeRange({...sizeRange, max: e.target.value})} className="w-20 pl-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-2 py-1 text-sm text-zinc-700 dark:text-zinc-200 focus:border-blue-500 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
-                            </div>
+                      <h4 className="text-xs font-bold uppercase text-zinc-500 mb-2">Size Range (MB)</h4>
+                      <div className="flex items-center gap-2">
+                        <div className="relative">
+                          <span className="absolute left-2 top-1.5 text-xs text-zinc-400">Min</span>
+                          <input type="number" value={sizeRange.min} onChange={(e) => setSizeRange({...sizeRange, min: e.target.value})} className="w-20 pl-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-2 py-1 text-sm text-zinc-700 dark:text-zinc-200 focus:border-blue-500 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
                         </div>
+                        <span className="text-zinc-300 dark:text-zinc-600">-</span>
+                        <div className="relative">
+                          <span className="absolute left-2 top-1.5 text-xs text-zinc-400">Max</span>
+                          <input type="number" value={sizeRange.max} onChange={(e) => setSizeRange({...sizeRange, max: e.target.value})} className="w-20 pl-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded px-2 py-1 text-sm text-zinc-700 dark:text-zinc-200 focus:border-blue-500 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                        </div>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -174,11 +166,10 @@ export default function ProjectsPage() {
                     </div>
                 </div>
                 
-                <div className="relative bg-zinc-200 dark:bg-zinc-800 p-1 rounded-lg flex shrink-0 ml-auto">
-                    <div className={`absolute top-1 bottom-1 w-8 bg-white dark:bg-zinc-600 rounded shadow-sm transition-all duration-300 ease-in-out ${layout === 'list' ? 'left-1' : 'left-9'}`}></div>
-                    <button onClick={() => setLayout('list')} className="relative z-10 p-1.5 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg></button>
-                    <button onClick={() => setLayout('grid')} className="relative z-10 p-1.5 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg></button>
-                </div>
+                <div className={styles.projectsLayoutToggleWrapper}>
+                  <div className={`${styles.projectsLayoutToggleHandle} ${layout === 'list' ? 'left-1' : 'left-9'}`}></div>
+                  <button onClick={() => setLayout('list')} className={styles.projectsLayoutIconBtn}><svg className={styles.iconMd} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg></button>
+                  <button onClick={() => setLayout('grid')} className={styles.projectsLayoutIconBtn}><svg className={styles.iconMd} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg></button>
             </div>
             {layout === 'grid' && <div className="flex items-center gap-2"><Dropdown name="sort" label="Sort by" current={currentSortLabel} options={sortOptions} onSelect={(opt: any) => setSortConfig({ key: opt.key, dir: opt.dir })} activeDropdown={activeDropdown} toggleDropdown={toggleDropdown} /></div>}
         </div>

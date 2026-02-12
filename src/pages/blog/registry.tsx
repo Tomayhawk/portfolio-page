@@ -1,11 +1,12 @@
 import Blog1 from './entries/Blog1.tsx';
 import { ContentSection } from '../../components/Components.tsx';
+import { styles } from '../../utils/styles.ts';
 
 const PlaceholderBlog = ({ title }: { title: string }) => (
-    <div className="animate-fadeIn">
+    <div className={styles.animateFadeIn}>
         <ContentSection>
-            <p className="italic text-zinc-500">This is a temporary placeholder for the blog post: <strong>{title}</strong>.</p>
-            <p className="mt-4">Content for this section is coming soon. Use the categories above to navigate other topics.</p>
+            <p className={styles.blogRegistryPlaceholder}>This is a temporary placeholder for the blog post: <strong>{title}</strong>.</p>
+            <p className={styles.blogRegistryMt4}>Content for this section is coming soon. Use the categories above to navigate other topics.</p>
         </ContentSection>
     </div>
 );
