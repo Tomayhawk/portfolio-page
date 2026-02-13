@@ -1,9 +1,8 @@
 import { ContentSection } from '../../../components/Components.tsx';
-import { styles } from '../../../utils/styles.ts';
 
 export default function Blog1() {
     return (
-        <div className={styles.animateFadeIn}>
+        <div className="animate-fadeIn">
             <ContentSection>
                 <p>This is a temporary placeholder for the "Building a Portfolio with React" article. The actual content will be populated here.</p>
                 <p>We are using a component-based structure where each blog post is its own React component, allowing for rich interactivity and custom layouts per post if needed.</p>
