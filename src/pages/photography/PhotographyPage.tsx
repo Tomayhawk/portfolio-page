@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { PageHeader } from '../../components/Components.tsx';
-import { PHOTOS } from '../../utils/data.ts';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { PHOTOS } from '@/utils/data/photos';
 
 export default function PhotographyPage() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);

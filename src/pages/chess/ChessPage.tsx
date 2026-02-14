@@ -1,4 +1,4 @@
-import { PageHeader } from '../../components/Components.tsx';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 export default function ChessPage() {
   return (

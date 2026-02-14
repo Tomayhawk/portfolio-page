@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { CHESS_GAMES } from '../../utils/data.ts';
+import { CHESS_GAMES } from '@/utils/data/chess';
 
 export default function ChessGameDetailPage() {
   const { id } = useParams();

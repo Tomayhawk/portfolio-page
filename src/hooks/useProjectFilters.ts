@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { projectsData, getTagCategory } from '../utils/data.ts';
+import { getTagCategory } from '@/utils/data/helpers';
+import { projectsData } from '@/utils/data/projects';
 
 export function useProjectFilters() {
   const [layout, setLayout] = useState('grid');

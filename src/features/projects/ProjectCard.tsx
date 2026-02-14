@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { getTagColor } from '../utils/data.ts';
+import { getTagColor } from '@/utils/data/helpers';
 
 export const ProjectGridCard = ({ project }: { project: any }) => (
   <Link to={`/projects/${project.title}`} className="group flex flex-col bg-zinc-200 dark:bg-[#18181b] rounded-lg overflow-hidden border border-transparent hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 h-64">

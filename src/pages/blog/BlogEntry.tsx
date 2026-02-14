@@ -1,14 +1,28 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { BLOG_POSTS } from '../../utils/data.ts';
-import blogRegistry from './registry.tsx';
+import ReactMarkdown from 'react-markdown';
+import { BLOG_POSTS } from '@/utils/data/blog';
+import { CodeSnippet } from '@/components/ui/CodeSnippet';
 
-export default function BlogDetailPage() {
+export default function BlogEntry() {
   const { id } = useParams();
-  const post = BLOG_POSTS.find(p => p.title === id);
+  
+  // Note: If you updated your Router to use IDs (e.g. /blog/building-portfolio), 
+  // change this to: p.id === id. 
+  // If you still use Titles in URLs (e.g. /blog/Building%20a%20...), keep p.title === id.
+  const post = BLOG_POSTS.find(p => p.title === id); 
+  
+  const [content, setContent] = useState('');
+
+  useEffect(() => {
+    if (post && post.id) {
+      import(`../../content/blog/${post.id}.md?raw`)
+        .then(res => setContent(res.default))
+        .catch(err => setContent("Content not found."));
+    }
+  }, [post]);
   
   if (!post) return <div className="text-center py-20 text-zinc-500">Post not found</div>;
-
-  const SpecificComponent = blogRegistry[post.title];
 
   return (
     <div className="max-w-3xl mx-auto py-8 animate-fadeIn">
@@ -17,7 +31,11 @@ export default function BlogDetailPage() {
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                 Back to Blog
             </Link>
-            <h1 className={"text-4xl font-extrabold text-zinc-900 dark:text-zinc-50 mb-4 tracking-tight"}>{post.title}</h1>
+            
+            <h1 className="text-4xl font-extrabold text-zinc-900 dark:text-zinc-50 mb-4 tracking-tight">
+                {post.title}
+            </h1>
+            
             <div className="flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400 font-mono mb-6">
                  <span>{new Date(post.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                  <span>•</span>
@@ -27,11 +45,31 @@ export default function BlogDetailPage() {
                     ))}
                  </div>
             </div>
-            <p className={"text-zinc-600 dark:text-zinc-400 text-xl leading-relaxed font-light mb-8 italic border-l-4 border-zinc-200 dark:border-zinc-800 pl-4"}>{post.excerpt}</p>
+            
+            <p className="text-zinc-600 dark:text-zinc-400 text-xl leading-relaxed font-light mb-8 italic border-l-4 border-zinc-200 dark:border-zinc-800 pl-4">
+                {post.excerpt}
+            </p>
          </div>
 
          <div className="prose dark:prose-invert max-w-none text-zinc-700 dark:text-zinc-300">
-             {SpecificComponent ? <SpecificComponent /> : <div className="p-8 bg-zinc-50 dark:bg-zinc-900 rounded-lg text-center text-zinc-500">Content pending.</div>}
+             <ReactMarkdown 
+                components={{
+                    code(props) {
+                        const {children, className, ...rest} = props;
+                        const match = /language-(\w+)/.exec(className || '');
+                        return match ? (
+                            <CodeSnippet 
+                                code={String(children).replace(/\n$/, '')} 
+                                language={match[1]} 
+                            /> 
+                        ) : (
+                            <code {...rest} className={className}>{children}</code>
+                        );
+                    }
+                }}
+             >
+                {content}
+             </ReactMarkdown>
          </div>
     </div>
   );

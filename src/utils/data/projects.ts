@@ -23,7 +23,7 @@ export const TAGS = {
 
 export const projectsData = [
   {
-    id: 1,
+    id: 'project-1',
     title: 'Project-1',
     description: 'A Discord bot that facilitates chess matches between users.',
     tags: [TAGS.PYTHON.label, TAGS.DISCORD.label, TAGS.ASYNC.label],

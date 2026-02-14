@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PageHeader, Tag } from '../../components/Components.tsx';
-import { ProjectGridCard } from '../../components/ProjectCard.tsx';
-import { useProjectFilters } from '../../hooks/useProjectFilters.ts';
-import { formatSize, getTagCategory } from '../../utils/data.ts';
+import { Badge } from '@/components/ui/Badge';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { ProjectGridCard } from '@/features/projects/ProjectCard';
+import { useProjectFilters } from '@/hooks/useProjectFilters';
+import { formatSize, getTagCategory } from '@/utils/data/helpers';
 
 const ListHeaderCell = ({ label, field, sortConfig, onSort, align = 'left', allowReverse = true, showArrow = true }: any) => (
   <div onClick={() => onSort(field, allowReverse)} className={`cursor-pointer hover:text-black dark:hover:text-white flex items-center gap-1 transition-colors text-${align} ${sortConfig.key === field ? 'text-blue-600 dark:text-blue-400' : ''}`}>
@@ -202,7 +203,7 @@ export default function ProjectsPage() {
                       <Link to={`/projects/${p.title}`} key={p.id} className={"grid grid-cols-[minmax(180px,1.2fr)_minmax(200px,3fr)_minmax(160px,1.1fr)_90px_90px_80px] gap-4 px-4 h-14 border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 items-center transition-colors group"}>
                           <div className="flex items-center gap-3 truncate font-medium text-zinc-700 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-left"><span className="truncate">{p.title}</span></div>
                           <div className="text-zinc-500 dark:text-zinc-400 truncate text-left">{p.description}</div>
-                          <div className="flex items-center gap-2 overflow-hidden h-full text-left flex-nowrap"><div className="flex items-center gap-2">{p.tags.map((t: string) => <Tag key={t} text={t} className="shrink-0" />)}</div></div>
+                          <div className="flex items-center gap-2 overflow-hidden h-full text-left flex-nowrap"><div className="flex items-center gap-2">{p.tags.map((t: string) => <Badge key={t} text={t} className="shrink-0" />)}</div></div>
                           <div className="text-zinc-500 dark:text-zinc-400 text-xs truncate text-left">{new Date(p.created).toLocaleDateString()}</div>
                           <div className="text-zinc-500 dark:text-zinc-400 text-xs truncate text-left">{new Date(p.modified).toLocaleDateString()}</div>
                           <div className="text-zinc-500 dark:text-zinc-400 text-xs truncate text-left font-mono">{formatSize(p.sizeBytes)}</div>

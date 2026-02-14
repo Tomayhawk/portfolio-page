@@ -1,6 +1,10 @@
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { projectsData, getTagColor, formatSize } from '../../utils/data.ts';
-import projectRegistry from './registry.tsx';
+import ReactMarkdown from 'react-markdown';
+import { formatSize } from '@/utils/data/helpers';
+import { projectsData } from '@/utils/data/projects';
+import { Badge } from '@/components/ui/Badge'; 
+import { CodeSnippet } from '@/components/ui/CodeSnippet';
 
 const MetaRow = ({ label, value, isMono = false }: { label: string; value: string | number; isMono?: boolean }) => (
     <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 flex-wrap gap-x-2">
@@ -43,46 +47,99 @@ const Metadata = ({ project }: { project: any }) => (
     </div>
 );
 
-export default function ProjectDetailPage() {
+export default function ProjectEntry() {
   const { id } = useParams();
   const project = projectsData.find(p => p.title === id);
+  const [content, setContent] = useState('');
+
+  // Dynamic Content Loading
+  useEffect(() => {
+    if (project) {
+      // Assuming Vite loads markdown as raw strings
+      import(`../../content/projects/${project.id}.md?raw`)
+        .then(res => setContent(res.default))
+        .catch(err => setContent("Content not found."));
+    }
+  }, [project]);
   
   if (!project) return <div className="text-center py-20 text-zinc-500">Project not found</div>;
 
-  const SpecificComponent = projectRegistry[project.title];
-
   return (
     <div className="max-w-full mx-auto py-8 animate-fadeIn">
-         <div className="mb-8">
-            <h1 className="text-4xl font-extrabold text-zinc-900 dark:text-zinc-50 mb-4 tracking-tight">{project.title}</h1>
-            <p className={"text-zinc-600 dark:text-zinc-400 text-xl leading-relaxed font-light mb-6"}>{project.description}</p>
-            <hr className="border-zinc-200 dark:border-zinc-800" />
-         </div>
+      {/* HEADER SECTION */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-extrabold text-zinc-900 dark:text-zinc-50 mb-4 tracking-tight">
+          {project.title}
+        </h1>
+        <p className="text-zinc-600 dark:text-zinc-400 text-xl leading-relaxed font-light mb-6">
+          {project.description}
+        </p>
+        <hr className="border-zinc-200 dark:border-zinc-800" />
+      </div>
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            <div className="flex-1 min-w-0">
-                 <div className="block lg:hidden mb-8 space-y-4">
-                    <Metadata project={project} />
-                    <div>
-                        <h3 className="text-xs font-bold uppercase text-zinc-400 mb-2 tracking-wider px-1">Tags</h3>
-                        <div className="flex flex-wrap gap-2">{project.tags.map((t: string) => <span key={t} className={`px-2 py-1 rounded text-xs font-bold ${getTagColor(t)}`}>{t}</span>)}</div>
-                    </div>
-                 </div>
-                 
-                 <div className="prose dark:prose-invert max-w-none">
-                     {SpecificComponent ? <SpecificComponent meta={project} /> : <div className="mt-12 p-8 bg-zinc-100 dark:bg-zinc-900 rounded-lg text-center text-zinc-500">Specific details for this project have not been populated yet.</div>}
-                </div>
+      {/* MAIN LAYOUT */}
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+      
+        {/* LEFT COLUMN */}
+        <div className="flex-1 min-w-0">
+        
+          {/* Mobile-Only Metadata */}
+          <div className="block lg:hidden mb-8 space-y-4">
+            <Metadata project={project} />
+            <div>
+              <h3 className="text-xs font-bold uppercase text-zinc-400 mb-2 tracking-wider px-1">
+                Tags
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((t: string) => (
+                  <Badge key={t} text={t} /> 
+                ))}
+              </div>
             </div>
-            <div className="hidden lg:block w-64 shrink-0">
-                <div className="sticky top-24 space-y-6">
-                    <Metadata project={project} />
-                    <div>
-                        <h3 className="text-xs font-bold uppercase text-zinc-400 mb-3 tracking-wider px-1">Tags</h3>
-                        <div className="flex flex-wrap gap-2">{project.tags.map((t: string) => <span key={t} className={`px-2 py-1 rounded text-xs font-bold ${getTagColor(t)}`}>{t}</span>)}</div>
-                    </div>
-                </div>
-            </div>
+          </div>
+
+          {/* Content Area */}
+          <div className="prose dark:prose-invert max-w-none">
+            <ReactMarkdown
+              components={{
+                code(props) {
+                  const { children, className, node, ...rest } = props;
+                  const match = /language-(\w+)/.exec(className || "");
+                  return match ? (
+                    <CodeSnippet
+                      code={String(children).replace(/\n$/, "")}
+                      language={match[1]}
+                    />
+                  ) : (
+                    <code {...rest} className={className}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+          </div>
         </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="hidden lg:block w-64 shrink-0">
+          <div className="sticky top-24 space-y-6">
+            <Metadata project={project} />
+            <div>
+              <h3 className="text-xs font-bold uppercase text-zinc-400 mb-3 tracking-wider px-1">
+                Tags
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((t: string) => (
+                  <Badge key={t} text={t} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

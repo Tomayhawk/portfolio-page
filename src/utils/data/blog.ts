@@ -1,6 +1,6 @@
 export const BLOG_POSTS = [
     { 
-      id: 1, 
+      id: 'blog-1', 
       title: 'Building a Portfolio with React', 
       date: '2026-02-05', 
       excerpt: 'How I structured this website using Vite and Tailwind CSS. (Temporary Placeholder)',

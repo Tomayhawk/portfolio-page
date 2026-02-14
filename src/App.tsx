@@ -1,14 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout.tsx';
-import HomePage from './pages/HomePage.tsx';
-import BlogPage from './pages/blog/BlogPage.tsx';
-import BlogEntry from './pages/blog/BlogEntry.tsx';
-import ProjectsPage from './pages/projects/ProjectsPage.tsx';
-import ProjectEntry from './pages/projects/ProjectEntry.tsx';
-import PhotographyPage from './pages/photography/PhotographyPage.tsx';
-import ChessPage from './pages/chess/ChessPage.tsx';
-import ChessEntry from './pages/chess/ChessEntry.tsx';
-import SearchResultsPage from './pages/SearchResultsPage.tsx';
+import Layout from './components/layout/Layout';
+import HomePage from './pages/HomePage';
+import BlogPage from './pages/blog/BlogPage';
+import BlogEntry from './pages/blog/BlogEntry';
+import ProjectsPage from './pages/projects/ProjectsPage';
+import ProjectEntry from './pages/projects/ProjectEntry';
+import PhotographyPage from './pages/photography/PhotographyPage';
+import ChessPage from './pages/chess/ChessPage';
+import ChessEntry from './pages/chess/ChessEntry';
+import SearchResultsPage from './pages/SearchResultsPage';
 
 export default function App() {
   return (

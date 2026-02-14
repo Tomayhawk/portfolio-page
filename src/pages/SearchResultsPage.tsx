@@ -1,5 +1,7 @@
 import { useSearchParams, Link } from 'react-router-dom';
-import { projectsData, BLOG_POSTS, PHOTOS } from '../utils/data.ts';
+import { BLOG_POSTS } from '@/utils/data/blog';
+import { PHOTOS } from '@/utils/data/photos';
+import { projectsData } from '@/utils/data/projects';
 
 const PAGES = [
     { title: 'Chess', path: '/chess', description: 'My chess games and analysis.' },

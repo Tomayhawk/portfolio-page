@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import Navbar from './Navbar.tsx';
-import { useDarkMode } from '../hooks/useDarkMode.ts';
+import useDarkMode from '@/hooks/useDarkMode';
+import Navbar from './Navbar';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { theme, toggleTheme } = useDarkMode();

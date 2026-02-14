@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PageHeader } from '../../components/Components.tsx';
-import { BLOG_POSTS } from '../../utils/data.ts';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { BLOG_POSTS } from '@/utils/data/blog';
 
 export default function BlogPage() {
   const [filter, setFilter] = useState('All');
