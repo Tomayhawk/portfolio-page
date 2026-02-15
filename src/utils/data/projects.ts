@@ -19,6 +19,7 @@ export const TAGS = {
   GAME_DEV: { label: 'Game Dev', color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200' },
   AI: { label: 'AI', color: 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-200' },
   MOBILE: { label: 'Mobile', color: 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-200' },
+  SCRIPTING: { label: 'Scripting', color: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200' },
 };
 
 export const projectsData = [
@@ -36,17 +37,17 @@ export const projectsData = [
     links: { github: 'https://github.com/tomayhawk/project1' }
   },
   {
-    id: 2,
-    title: 'Project-2',
-    description: 'A browser extension to modify web behavior and improve productivity.',
-    tags: [TAGS.JS.label, TAGS.EXTENSION.label, TAGS.REACT.label],
-    modified: '2026-01-20',
-    created: '2025-11-10',
-    sizeBytes: 450000,
-    version: '2.1.0',
+    id: 'spotify-archiver',
+    title: 'Spotify Archiver',
+    description: 'A pipeline that migrates Spotify playlists to local storage by fuzzy-matching metadata with YouTube sources.',
+    tags: [TAGS.PYTHON.label, TAGS.EXTENSION.label, TAGS.SCRIPTING.label],
+    modified: '2026-01-01',
+    created: '2026-01-01',
+    sizeBytes: 12000,
+    version: '1.0.0',
     license: 'MIT',
     status: 'Active',
-    links: { github: '#', demo: '#' }
+    links: { github: 'https://github.com/tomayhawk/spotify-archiver' }
   },
   {
     id: 3,

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 import { formatSize } from '@/utils/data/helpers';
 import { projectsData } from '@/utils/data/projects';
-import { Badge } from '@/components/ui/Badge'; 
-import { CodeSnippet } from '@/components/ui/CodeSnippet';
+import { Badge } from '@/components/ui/Badge';
+import { MarkdownRenderers } from '@/components/markdown/MarkdownRenderers';
 
 const MetaRow = ({ label, value, isMono = false }: { label: string; value: string | number; isMono?: boolean }) => (
     <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 flex-wrap gap-x-2">
@@ -99,25 +102,8 @@ export default function ProjectEntry() {
           </div>
 
           {/* Content Area */}
-          <div className="prose dark:prose-invert max-w-none">
-            <ReactMarkdown
-              components={{
-                code(props) {
-                  const { children, className, node, ...rest } = props;
-                  const match = /language-(\w+)/.exec(className || "");
-                  return match ? (
-                    <CodeSnippet
-                      code={String(children).replace(/\n$/, "")}
-                      language={match[1]}
-                    />
-                  ) : (
-                    <code {...rest} className={className}>
-                      {children}
-                    </code>
-                  );
-                },
-              }}
-            >
+          <div className="max-w-none">
+            <ReactMarkdown components={MarkdownRenderers}>
               {content}
             </ReactMarkdown>
           </div>
