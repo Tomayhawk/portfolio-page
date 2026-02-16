@@ -1,6 +1,5 @@
 import type { Components } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// Try 'oneDark' for better colors, or keep 'vscDarkPlus'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export const MarkdownRenderers: Components = {
@@ -122,7 +121,7 @@ export const MarkdownRenderers: Components = {
             </div>
         </div>
         <SyntaxHighlighter
-          style={vscDarkPlus as any} // Using oneDark for better contrast
+          style={vscDarkPlus as any}
           language={match?.[1]}
           PreTag="div"
           showLineNumbers={true} // Added line numbers
