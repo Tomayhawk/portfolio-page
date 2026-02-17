@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { BLOG_POSTS } from '@/utils/data/blog';
-import { CodeSnippet } from '@/components/ui/CodeSnippet';
+import { MarkdownRenderers } from '@/components/markdown/MarkdownRenderers';
 
 export default function BlogEntry() {
   const { id } = useParams();
@@ -51,26 +51,11 @@ export default function BlogEntry() {
             </p>
          </div>
 
-         <div className="prose dark:prose-invert max-w-none text-zinc-700 dark:text-zinc-300">
-             <ReactMarkdown 
-                components={{
-                    code(props) {
-                        const {children, className, ...rest} = props;
-                        const match = /language-(\w+)/.exec(className || '');
-                        return match ? (
-                            <CodeSnippet 
-                                code={String(children).replace(/\n$/, '')} 
-                                language={match[1]} 
-                            /> 
-                        ) : (
-                            <code {...rest} className={className}>{children}</code>
-                        );
-                    }
-                }}
-             >
+        <div className="prose dark:prose-invert max-w-none text-zinc-700 dark:text-zinc-300">
+             <ReactMarkdown components={MarkdownRenderers}>
                 {content}
              </ReactMarkdown>
-         </div>
+        </div>
     </div>
   );
 }
