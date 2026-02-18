@@ -3,7 +3,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export const MarkdownRenderers: Components = {
-  // --- HEADINGS (Font & Structure) ---
+  // HEADINGS (Font & Structure)
   h1: ({ node, ...props }) => (
     <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 mt-10 mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-4" {...props} />
   ),
@@ -17,7 +17,7 @@ export const MarkdownRenderers: Components = {
     <h4 className="text-lg font-medium text-zinc-700 dark:text-zinc-400 mt-4 mb-2 uppercase tracking-wide" {...props} />
   ),
 
-  // --- TEXT BODY (Typography) ---
+  // TEXT BODY (Typography)
   p: ({ node, ...props }) => (
     <p className="text-base text-zinc-600 dark:text-zinc-400 leading-7 mb-5" {...props} />
   ),
@@ -31,14 +31,14 @@ export const MarkdownRenderers: Components = {
     <del className="line-through text-zinc-400 dark:text-zinc-600" {...props} />
   ),
   
-  // --- BLOCKQUOTES (Callouts/Structures) ---
+  // BLOCKQUOTES (Callouts/Structures)
   blockquote: ({ node, ...props }) => (
     <div className="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 my-6 rounded-r-lg italic text-zinc-700 dark:text-zinc-300 shadow-sm">
       <blockquote {...props} />
     </div>
   ),
 
-  // --- LISTS ---
+  // LISTS
   ul: ({ node, ...props }) => (
     <ul className="list-disc list-outside ml-6 space-y-2 mb-6 text-zinc-600 dark:text-zinc-400 marker:text-zinc-400" {...props} />
   ),
@@ -49,7 +49,7 @@ export const MarkdownRenderers: Components = {
     <li className="pl-1" {...props} />
   ),
 
-  // --- LINKS ---
+  // LINKS
   a: ({ node, ...props }) => (
     <a 
       className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline decoration-blue-300/50 underline-offset-2 transition-colors font-medium" 
@@ -59,7 +59,7 @@ export const MarkdownRenderers: Components = {
     />
   ),
 
-  // --- IMAGES (Media) ---
+  // IMAGES (Media)
   img: ({ node, ...props }) => (
     <img 
       className="rounded-xl shadow-lg border border-zinc-200 dark:border-zinc-800 my-8 w-full object-cover max-h-[500px]" 
@@ -68,12 +68,12 @@ export const MarkdownRenderers: Components = {
     />
   ),
 
-  // --- DIVIDERS (Structure) ---
+  // DIVIDERS (Structure)
   hr: ({ node, ...props }) => (
     <hr className="my-10 border-t-2 border-zinc-100 dark:border-zinc-800/50 w-32 mx-auto" {...props} />
   ),
 
-  // --- TABLES (Complex Data) ---
+  // TABLES (Complex Data)
   table: ({ node, ...props }) => (
     <div className="overflow-x-auto my-8 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm">
       <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 text-sm" {...props} />
@@ -95,7 +95,7 @@ export const MarkdownRenderers: Components = {
     <td className="px-4 py-3 whitespace-nowrap text-zinc-700 dark:text-zinc-300" {...props} />
   ),
 
-  // --- CODE ---
+  // CODE
   code({ node, className, children, ref, ...props }) {
     const match = /language-(\w+)/.exec((className as string) || '');
     const isInline = !match;
