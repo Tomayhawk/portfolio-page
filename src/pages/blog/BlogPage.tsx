@@ -6,11 +6,19 @@ import { BLOG_POSTS } from '@/utils/data/blog';
 export default function BlogPage() {
   const [filter, setFilter] = useState('All');
   
-  const categories = ['All', 'Projects', 'Photography', 'Chess', 'Activity'];
+  const categories = ['All', 'Projects', 'Photography', 'Chess', 'Activity', 'Pinned'];
   
   const filteredPosts = filter === 'All' 
     ? BLOG_POSTS 
     : BLOG_POSTS.filter(post => post.categories.includes(filter));
+
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    const aPinned = a.categories.includes('Pinned');
+    const bPinned = b.categories.includes('Pinned');
+    if (aPinned && !bPinned) return -1;
+    if (!aPinned && bPinned) return 1;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 
   return (
     <div className="max-w-full">
@@ -33,7 +41,7 @@ export default function BlogPage() {
       </div>
 
       <div className="space-y-12 animate-fadeIn">
-        {filteredPosts.length > 0 ? filteredPosts.map(post => (
+        {sortedPosts.length > 0 ? sortedPosts.map(post => (
           <div key={post.id} className="flex flex-col gap-2 group">
              <div className="flex items-center gap-3">
                  <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500">{new Date(post.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>

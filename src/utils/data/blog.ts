@@ -4,7 +4,7 @@ export const BLOG_POSTS = [
       title: 'Building a Portfolio with React', 
       date: '2026-02-05', 
       excerpt: 'How I structured this website using Vite and Tailwind CSS. (Temporary Placeholder)',
-      categories: ['Projects'],
+      categories: ['Projects', 'Pinned'],
       created: '2026-02-05',
       modified: '2026-02-05',
       sizeBytes: 12000,
