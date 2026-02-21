@@ -9,6 +9,17 @@ interface AnalysisBoardProps {
   initialFen?: string;
   initialPgn?: string;
   onMove?: (fen: string, history: string[]) => void;
+  currentMoveIndex?: number;
+  onMoveIndexChange?: (index: number) => void;
+  showControls?: boolean;
+  showAnalysis?: boolean;
+  showAnalysisBar?: boolean;
+  engineTime?: number;
+  engineLines?: number;
+  onEngineSettingsChange?: (time: number, lines: number) => void;
+  onAnalysisDataChange?: (data: EngineOutput) => void;
+  boardOrientation?: 'white' | 'black';
+  onBoardOrientationChange?: (orientation: 'white' | 'black') => void;
 }
 
 type EngineOutput = {
@@ -16,22 +27,39 @@ type EngineOutput = {
   lines: Record<number, { score: string; pv: string; mate?: string | undefined }>;
 };
 
-export const AnalysisBoard = ({ initialFen, initialPgn, onMove }: AnalysisBoardProps) => {
+export const AnalysisBoard = ({ 
+  initialFen, 
+  initialPgn, 
+  onMove, 
+  currentMoveIndex, 
+  onMoveIndexChange,
+  showControls = true,
+  showAnalysis = true,
+  showAnalysisBar = true,
+  engineTime: externalEngineTime,
+  engineLines: externalEngineLines,
+  onEngineSettingsChange,
+  onAnalysisDataChange,
+  boardOrientation: externalBoardOrientation,
+  onBoardOrientationChange
+}: AnalysisBoardProps) => {
   // Game State
   const gameRef = useRef(new Chess());
   const [fen, setFen] = useState('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
   const [moveIndex, setMoveIndex] = useState(0);
   const [history, setHistory] = useState<Move[]>([]);
 
+  // Engine
+  const engine = useMemo(() => new Engine(), []);
+
   // Board visual state
-  const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white');
+  const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>(externalBoardOrientation || 'white');
   const [optionSquares, setOptionSquares] = useState<Record<string, React.CSSProperties>>({});
   const [moveFrom, setMoveFrom] = useState<string | null>(null);
 
   // Engine State
-  const engine = useMemo(() => new Engine(), []);
-  const [engineTime, setEngineTime] = useState(2);
-  const [engineLines, setEngineLines] = useState(1);
+  const [engineTime, setEngineTime] = useState(externalEngineTime || 2);
+  const [engineLines, setEngineLines] = useState(externalEngineLines || 1);
   const [analysisData, setAnalysisData] = useState<EngineOutput>({ evaluation: '0.00', lines: {} });
 
   // Helper to Replay Moves Safely
@@ -68,6 +96,32 @@ export const AnalysisBoard = ({ initialFen, initialPgn, onMove }: AnalysisBoardP
     setMoveIndex(0);
     setFen(game.fen());
   }, [initialFen, initialPgn]);
+
+  // Sync with external props
+  useEffect(() => {
+    if (externalEngineTime !== undefined) setEngineTime(externalEngineTime);
+  }, [externalEngineTime]);
+
+  useEffect(() => {
+    if (externalEngineLines !== undefined) setEngineLines(externalEngineLines);
+  }, [externalEngineLines]);
+
+  useEffect(() => {
+    if (externalBoardOrientation) setBoardOrientation(externalBoardOrientation);
+  }, [externalBoardOrientation]);
+
+  // Call callbacks when state changes
+  useEffect(() => {
+    if (onEngineSettingsChange) onEngineSettingsChange(engineTime, engineLines);
+  }, [engineTime, engineLines, onEngineSettingsChange]);
+
+  useEffect(() => {
+    if (onAnalysisDataChange) onAnalysisDataChange(analysisData);
+  }, [analysisData, onAnalysisDataChange]);
+
+  useEffect(() => {
+    if (onBoardOrientationChange) onBoardOrientationChange(boardOrientation);
+  }, [boardOrientation, onBoardOrientationChange]);
 
   // Engine Logic
   useEffect(() => {
@@ -160,6 +214,7 @@ export const AnalysisBoard = ({ initialFen, initialPgn, onMove }: AnalysisBoardP
     setFen(gameRef.current.fen());
 
     if (onMove) onMove(gameRef.current.fen(), gameRef.current.history());
+    if (onMoveIndexChange) onMoveIndexChange(newHistory.length);
   }
 
   function onPieceDrop({ piece, sourceSquare, targetSquare }: { piece: { isSparePiece: boolean, pieceType: string, position: string }, sourceSquare: string, targetSquare: string | null }): boolean {
@@ -249,9 +304,11 @@ export const AnalysisBoard = ({ initialFen, initialPgn, onMove }: AnalysisBoardP
       }
       setFen(tempGame.fen());
 
+      if (onMoveIndexChange) onMoveIndexChange(newIndex);
+
       return newIndex;
     });
-  }, [history, initialFen, initialPgn]);
+  }, [history, initialFen, initialPgn, onMoveIndexChange]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -284,12 +341,14 @@ export const AnalysisBoard = ({ initialFen, initialPgn, onMove }: AnalysisBoardP
   return (
     <div className="flex flex-col md:flex-row gap-4 w-full select-none">
       {/* Analysis Bar */}
-      <div className="hidden md:flex flex-col w-6 bg-zinc-200 dark:bg-zinc-800 rounded overflow-hidden relative border border-zinc-300 dark:border-zinc-700 h-[500px]">
-        <div
-          className="absolute w-full bg-zinc-400 dark:bg-zinc-600 transition-all duration-500"
-          style={{ height: `${evalPercent}%`, top: 0 }}
-        />
-      </div>
+      {showAnalysisBar && (
+        <div className="hidden md:flex flex-col w-6 bg-zinc-200 dark:bg-zinc-800 rounded overflow-hidden relative border border-zinc-300 dark:border-zinc-700 h-[500px]">
+          <div
+            className="absolute w-full bg-zinc-400 dark:bg-zinc-600 transition-all duration-500"
+            style={{ height: `${evalPercent}%`, top: 0 }}
+          />
+        </div>
+      )}
 
       {/* Board Area */}
       <div className="flex-1 max-w-[600px] flex flex-col gap-2">
@@ -312,66 +371,75 @@ export const AnalysisBoard = ({ initialFen, initialPgn, onMove }: AnalysisBoardP
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col gap-2 bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
-          <div className="flex justify-between items-center text-xs text-zinc-500">
-            <div className="flex gap-2 items-center">
-              <span>Time: {engineTime}s</span>
-              <input
-                type="range" min="1" max="10" value={engineTime}
-                onChange={(e) => setEngineTime(parseInt(e.target.value))}
-                className="w-20"
-              />
+        {showControls && (
+          <div className="flex flex-col gap-2 bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
+            <div className="flex justify-between items-center text-xs text-zinc-500">
+              <div className="flex gap-2 items-center">
+                <span>Time: {engineTime}s</span>
+                <input
+                  type="range" min="1" max="10" value={engineTime}
+                  onChange={(e) => setEngineTime(parseInt(e.target.value))}
+                  className="w-20"
+                />
+              </div>
+              <div className="flex gap-2 items-center">
+                <span>Lines: {engineLines}</span>
+                <input
+                  type="range" min="1" max="3" value={engineLines}
+                  onChange={(e) => setEngineLines(parseInt(e.target.value))}
+                  className="w-16"
+                />
+              </div>
             </div>
-            <div className="flex gap-2 items-center">
-              <span>Lines: {engineLines}</span>
-              <input
-                type="range" min="1" max="3" value={engineLines}
-                onChange={(e) => setEngineLines(parseInt(e.target.value))}
-                className="w-16"
-              />
+
+            <div className="flex justify-center gap-2 font-mono">
+              <button onClick={() => navigate('start')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&lt;&lt;</button>
+              <button onClick={() => navigate('prev')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&lt;</button>
+              <button onClick={() => navigate('next')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&gt;</button>
+              <button onClick={() => navigate('end')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&gt;&gt;</button>
+            </div>
+
+            <div className="flex justify-center gap-4 border-t border-zinc-200 dark:border-zinc-800 pt-2">
+              <button
+                onClick={() => {
+                  const newOrientation = boardOrientation === 'white' ? 'black' : 'white';
+                  setBoardOrientation(newOrientation);
+                  if (onBoardOrientationChange) onBoardOrientationChange(newOrientation);
+                }}
+                className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
+              >
+                Flip Board
+              </button>
+              <button
+                onClick={() => {
+                  gameRef.current.reset();
+                  setFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+                  setHistory([]);
+                  setMoveIndex(0);
+                  setOptionSquares({});
+                }}
+                className="text-xs text-red-600 hover:text-red-800"
+              >
+                Reset Game
+              </button>
             </div>
           </div>
+        )}
 
-          <div className="flex justify-center gap-2 font-mono">
-            <button onClick={() => navigate('start')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&lt;&lt;</button>
-            <button onClick={() => navigate('prev')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&lt;</button>
-            <button onClick={() => navigate('next')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&gt;</button>
-            <button onClick={() => navigate('end')} className="px-3 py-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded">&gt;&gt;</button>
+        {/* Analysis Lines */}
+        {showAnalysis && (
+          <div className="text-xs font-mono space-y-1 bg-zinc-950 text-zinc-300 p-2 rounded">
+            {Object.entries(analysisData.lines).map(([id, line]) => (
+              <div key={id} className="truncate">
+                <span className={`inline-block w-12 font-bold ${line.score.startsWith('-') ? 'text-red-400' : 'text-green-400'}`}>
+                  {line.score}
+                </span>
+                <span className="opacity-75">{line.pv}</span>
+              </div>
+            ))}
+            {Object.keys(analysisData.lines).length === 0 && <span className="opacity-50">Engine calculating...</span>}
           </div>
-
-          <div className="flex justify-center gap-4 border-t border-zinc-200 dark:border-zinc-800 pt-2">
-            <button
-              onClick={() => setBoardOrientation(b => b === 'white' ? 'black' : 'white')}
-              className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
-            >
-              Flip Board
-            </button>
-            <button
-              onClick={() => {
-                gameRef.current.reset();
-                setFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
-                setHistory([]);
-                setMoveIndex(0);
-                setOptionSquares({});
-              }}
-              className="text-xs text-red-600 hover:text-red-800"
-            >
-              Reset Game
-            </button>
-          </div>
-        </div>
-
-        <div className="text-xs font-mono space-y-1 bg-zinc-950 text-zinc-300 p-2 rounded">
-          {Object.entries(analysisData.lines).map(([id, line]) => (
-            <div key={id} className="truncate">
-              <span className={`inline-block w-12 font-bold ${line.score.startsWith('-') ? 'text-red-400' : 'text-green-400'}`}>
-                {line.score}
-              </span>
-              <span className="opacity-75">{line.pv}</span>
-            </div>
-          ))}
-          {Object.keys(analysisData.lines).length === 0 && <span className="opacity-50">Engine calculating...</span>}
-        </div>
+        )}
       </div>
     </div>
   );
