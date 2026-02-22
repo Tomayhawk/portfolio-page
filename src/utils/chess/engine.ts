@@ -60,10 +60,9 @@ export default class Engine {
     this.stockfish.postMessage(`setoption name ${name} value ${value}`);
   }
 
-  evaluatePosition(fen: string, time: number = 2) {
-    const timeMs = time * 1000;
+  evaluatePosition(fen: string, depth: number = 15) {
     this.stockfish.postMessage(`position fen ${fen}`);
-    this.stockfish.postMessage(`go movetime ${timeMs}`);
+    this.stockfish.postMessage(`go depth ${depth}`);
   }
 
   stop() {

@@ -14,12 +14,13 @@ interface AnalysisBoardProps {
   showControls?: boolean;
   showAnalysis?: boolean;
   showAnalysisBar?: boolean;
-  engineTime?: number;
+  engineDepth?: number;
   engineLines?: number;
-  onEngineSettingsChange?: (time: number, lines: number) => void;
+  onEngineSettingsChange?: (depth: number, lines: number) => void;
   onAnalysisDataChange?: (data: EngineOutput) => void;
   boardOrientation?: 'white' | 'black';
   onBoardOrientationChange?: (orientation: 'white' | 'black') => void;
+  resetTrigger?: number;
 }
 
 type EngineOutput = {
@@ -36,12 +37,13 @@ export const AnalysisBoard = ({
   showControls = true,
   showAnalysis = true,
   showAnalysisBar = true,
-  engineTime: externalEngineTime,
+  engineDepth: externalEngineDepth,
   engineLines: externalEngineLines,
   onEngineSettingsChange,
   onAnalysisDataChange,
   boardOrientation: externalBoardOrientation,
-  onBoardOrientationChange
+  onBoardOrientationChange,
+  resetTrigger
 }: AnalysisBoardProps) => {
   // Game State
   const gameRef = useRef(new Chess());
@@ -58,7 +60,7 @@ export const AnalysisBoard = ({
   const [moveFrom, setMoveFrom] = useState<string | null>(null);
 
   // Engine State
-  const [engineTime, setEngineTime] = useState(externalEngineTime || 2);
+  const [engineDepth, setEngineDepth] = useState(externalEngineDepth || 15);
   const [engineLines, setEngineLines] = useState(externalEngineLines || 1);
   const [analysisData, setAnalysisData] = useState<EngineOutput>({ evaluation: '0.00', lines: {} });
 
@@ -99,8 +101,8 @@ export const AnalysisBoard = ({
 
   // Sync with external props
   useEffect(() => {
-    if (externalEngineTime !== undefined) setEngineTime(externalEngineTime);
-  }, [externalEngineTime]);
+    if (externalEngineDepth !== undefined) setEngineDepth(externalEngineDepth);
+  }, [externalEngineDepth]);
 
   useEffect(() => {
     if (externalEngineLines !== undefined) setEngineLines(externalEngineLines);
@@ -110,10 +112,37 @@ export const AnalysisBoard = ({
     if (externalBoardOrientation) setBoardOrientation(externalBoardOrientation);
   }, [externalBoardOrientation]);
 
+  // Reset trigger
+  useEffect(() => {
+    if (resetTrigger !== undefined) {
+      gameRef.current.reset();
+      setFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+      setHistory([]);
+      setMoveIndex(0);
+      setOptionSquares({});
+      setMoveFrom(null);
+    }
+  }, [resetTrigger]);
+
+  // Sync moveIndex with currentMoveIndex
+  useEffect(() => {
+    if (currentMoveIndex !== undefined && currentMoveIndex !== moveIndex) {
+      setMoveIndex(currentMoveIndex);
+      // Update fen accordingly
+      const tempGame = new Chess();
+      if (initialFen && !initialPgn) tempGame.load(initialFen);
+      for (let i = 0; i < currentMoveIndex; i++) {
+        const move = history[i];
+        if (move) makeMoveSafe(tempGame, move);
+      }
+      setFen(tempGame.fen());
+    }
+  }, [currentMoveIndex, history, initialFen, initialPgn]);
+
   // Call callbacks when state changes
   useEffect(() => {
-    if (onEngineSettingsChange) onEngineSettingsChange(engineTime, engineLines);
-  }, [engineTime, engineLines, onEngineSettingsChange]);
+    if (onEngineSettingsChange) onEngineSettingsChange(engineDepth, engineLines);
+  }, [engineDepth, engineLines, onEngineSettingsChange]);
 
   useEffect(() => {
     if (onAnalysisDataChange) onAnalysisDataChange(analysisData);
@@ -144,18 +173,18 @@ export const AnalysisBoard = ({
 
     const timeout = setTimeout(() => {
       engine.setOption('MultiPV', engineLines);
-      engine.evaluatePosition(currentFen, engineTime);
+      engine.evaluatePosition(currentFen, engineDepth);
     }, 200);
 
     return () => {
       clearTimeout(timeout);
       engine.stop();
     };
-  }, [fen, moveIndex, engineTime, engineLines, engine, history, initialFen, initialPgn]);
+  }, [fen, moveIndex, engineDepth, engineLines, engine, history, initialFen, initialPgn]);
 
   useEffect(() => {
     engine.onMessage(({ positionEvaluation, possibleMate, pv, depth, multipv }) => {
-      if (depth && depth < 5) return;
+      if (depth && depth < 10) return;
 
       setAnalysisData(prev => {
         const newLines = { ...prev.lines };
@@ -375,10 +404,10 @@ export const AnalysisBoard = ({
           <div className="flex flex-col gap-2 bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800">
             <div className="flex justify-between items-center text-xs text-zinc-500">
               <div className="flex gap-2 items-center">
-                <span>Time: {engineTime}s</span>
+                <span>Depth: {engineDepth}</span>
                 <input
-                  type="range" min="1" max="10" value={engineTime}
-                  onChange={(e) => setEngineTime(parseInt(e.target.value))}
+                  type="range" min="5" max="25" value={engineDepth}
+                  onChange={(e) => setEngineDepth(parseInt(e.target.value))}
                   className="w-20"
                 />
               </div>
